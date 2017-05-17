@@ -1,14 +1,15 @@
 <template>
-  <div class="sale">
-    <h1>商品销售</h1>
+  <div class="">
+    原价
   </div>
 </template>
 
 <script>
 export default {
-  name: 'sale',
+  name: 'hello',
   data () {
     return {
+      msg: '权健'
     }
   }
 }

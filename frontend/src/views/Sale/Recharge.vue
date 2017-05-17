@@ -1,14 +1,15 @@
 <template>
-  <div class="user">
-    <h1>会员管理</h1>
+  <div class="">
+    充值
   </div>
 </template>
 
 <script>
 export default {
-  name: 'user',
+  name: 'hello',
   data () {
     return {
+      msg: '权健'
     }
   }
 }
