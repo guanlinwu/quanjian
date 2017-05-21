@@ -6,7 +6,8 @@ namespace quanjian.EntityFrameworkCore
     {
         public static void Configure(DbContextOptionsBuilder<quanjianDbContext> builder, string connectionString)
         {
-            builder.UseSqlServer(connectionString);
+            builder.UseMySql(connectionString);
+            //builder.UseSqlServer(connectionString);
         }
     }
 }
