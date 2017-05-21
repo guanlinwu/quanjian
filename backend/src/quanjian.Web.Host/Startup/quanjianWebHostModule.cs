@@ -1,14 +1,20 @@
 ﻿using System.Reflection;
+using Abp.AspNetCore;
+using Abp.AspNetCore.Configuration;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using quanjian.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using quanjian.Customers;
 
 namespace quanjian.Web.Host.Startup
 {
     [DependsOn(
-       typeof(quanjianWebCoreModule))]
+       typeof(quanjianWebCoreModule),
+        typeof(quanjianApplicationModule),
+        typeof(AbpAspNetCoreModule))]
+
     public class quanjianWebHostModule: AbpModule
     {
         private readonly IHostingEnvironment _env;
@@ -20,9 +26,15 @@ namespace quanjian.Web.Host.Startup
             _appConfiguration = env.GetAppConfiguration();
         }
 
+        public override void PreInitialize()
+        {
+            Configuration.Modules.AbpAspNetCore()
+                .CreateControllersForAppServices(typeof(quanjianApplicationModule).GetAssembly());
+        }
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(quanjianWebHostModule).GetAssembly());
+
         }
     }
 }

@@ -7,10 +7,12 @@ using quanjian.Customers.Dto;
 
 namespace quanjian.Customers
 {
-    interface ICustomerAppService:IApplicationService
+    public interface ICustomerAppService:IApplicationService
     {
         Task<List<CustomerDto>> GetAllUserList();
         Task<List<CustomerDto>> QueryUserList(string search);
         Task<CustomerDto> GetUserByName(string name);
+        Task CreateCustomer(CreateCustomerInput input);
+        Task UpdateCustomer(UpdateCustomerInput input);
     }
 }
