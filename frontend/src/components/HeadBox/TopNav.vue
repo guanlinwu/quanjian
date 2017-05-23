@@ -29,7 +29,6 @@ export default {
       console.log(this.$route);
       let path = this.$route.name,
         index = '1';
-      console.log(/sale/.test(path))
       switch (true) {
         case /user/.test(path):
           index = '1';
