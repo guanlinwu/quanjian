@@ -17,7 +17,7 @@
             @select="handleSelect"
             :on-icon-click="handleIconClick"
           ></el-autocomplete>
-          <el-button class="btn-add" @click="dialogFormVisible = true" type="primary">添 加<i class="el-icon-plus el-icon--right"></i></el-button>
+          <el-button class="btn-add" @click="dialogAddFormVisible = true" type="primary">添 加<i class="el-icon-plus el-icon--right"></i></el-button>
           <el-button class="btn-batch" type="primary">批量录入<i class="el-icon-upload el-icon--right"></i></el-button>
           <el-button type="text">批量模版下载</el-button>
         </div>
@@ -84,7 +84,7 @@
               </el-table-column>
               <el-table-column label="操作" width="140" fixed="right">
                 <template scope="scope">
-                  <el-button
+                  <el-button @click="handleModify(scope.$index, scope.row)"
                     size="small"
                     >编辑</el-button>
                   <el-button
@@ -102,61 +102,25 @@
 
     <!--弹窗-->
     <!-- Form -->
+    <AddDialog :dialogAddFormVisible='dialogAddFormVisible'></AddDialog>
+    <ModifyDialog :dialogModifyFormVisible='dialogModifyFormVisible'></ModifyDialog>
 
-    <el-dialog  title="会员信息" :visible.sync="dialogFormVisible">
-      <el-form :inline="true" :model="userform">
-          <el-form-item label="姓名" label-width="100px">
-            <el-input v-model="userform.name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="编号" label-width="100px">
-            <el-input v-model="userform.number" auto-complete="off"></el-input>
-          </el-form-item>
-          <!-- 判断累积会员还是充值会员 -->
-          <el-form-item v-if="isLeiJi" label="累积级别" label-width="100px">
-            <el-input v-model="userform.accumulateLevel" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item v-else label="会员加盟总额" label-width="100px">
-            <el-input v-model="userform.joinMoney" auto-complete="off"></el-input>
-          </el-form-item>
-          <!-- 判断累积会员还是充值会员 end -->
-          <el-form-item label="会员身份" label-width="100px">
-            <el-select v-model="userform.userType" @change="handleUserTypeChange">
-              <el-option label="充值会员" value="chongzhi"></el-option>
-              <el-option label="累积会员" value="leiji"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="联系方式" label-width="100px">
-            <el-input v-model="userform.phone" auto-complete="off"></el-input>
-          </el-form-item>
-
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import LeftNav from 'components/LeftNav';
+import AddDialog from 'components/User/AddDialog';
+import ModifyDialog from 'components/User/ModifyDialog';
 
 export default {
   name: 'user',
   data () {
     return {
-      //是否弹窗表单
-      dialogFormVisible: false,
-      //表单数据
-      userform: {
-        name: '',
-        number: '',
-        joinMoney: '',
-        userType: '',
-        phone: '',
-        accumulateLevel: ''
-      },
+      //是否弹窗添加会员表单
+      dialogAddFormVisible: false,
+      //是否弹窗添加会员表单
+      dialogModifyFormVisible: false,
       //是否是累积会员
       isLeiJi: false,
       //搜索框内容
@@ -213,7 +177,13 @@ export default {
     }
   },
   components: {
-    LeftNav
+    LeftNav,
+    AddDialog,
+    ModifyDialog
+  },
+  created () {
+    this.$bus.on('toggleAddFormVisible', this.toggleAddFormVisible);
+    this.$bus.on('toggleModifyFormVisible', this.toggleModifyFormVisible);
   },
   methods: {
     //搜索框查询建议
@@ -228,10 +198,18 @@ export default {
     handleSelect (item) {
       console.log(item);
     },
-    //处理select表单选中值发生变化
-    handleUserTypeChange (item) {
-      console.log(item);
-      this.isLeiJi = item === 'leiji';
+    //设置添加会员弹窗是否显示
+    toggleAddFormVisible () {
+      this.dialogAddFormVisible = !this.dialogAddFormVisible;
+    },
+    //设置添加会员弹窗是否显示
+    toggleModifyFormVisible () {
+      console.log(11)
+      this.dialogModifyFormVisible = !this.dialogModifyFormVisible;
+    },
+    //处理编辑会员信息 row是当前数据, index是当前索引
+    handleModify (index, row) {
+      this.dialogModifyFormVisible = true;
     }
   }
 }
