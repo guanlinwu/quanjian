@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Abp.AspNetCore;
 using Abp.Castle.Logging.Log4Net;
 using quanjian.Authorization.Roles;
@@ -61,8 +62,13 @@ namespace quanjian.Web.Host.Startup
             {
                 options.AddPolicy(DefaultCorsPolicyName, p =>
                 {
+                    var builder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json");
+                    var config = builder.Build();
+                    
                     //todo: Get from confiuration
-                    p.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                    p.WithOrigins(config["QuanJianSetting:Cors"]).AllowAnyHeader().AllowAnyMethod();
                 });
             });
 
