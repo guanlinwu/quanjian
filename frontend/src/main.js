@@ -7,8 +7,8 @@ import ElementUI from 'element-ui';
 import VueBus from 'vue-bus';
 
 import 'element-ui/lib/theme-default/index.css';
-
-
+import axios from 'axios';
+Vue.prototype.axios = axios;
 Vue.use(ElementUI);
 Vue.use(VueBus);
 

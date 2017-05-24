@@ -22,18 +22,18 @@ npm run build --report
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 ## 文件夹说明
-> src              项目开发文件  
->> api             后端请求文件  
->> components      vue  组件  
->> views           vue  容器  
->> router vue      路由配置  
+> src              项目开发文件
+>> api             后端请求文件
+>> components      vue  组件
+>> views           vue  容器
+>> router vue      路由配置
 >> App.vue         入口vue容器
 >> main.js         入口js
->>  
+>>
 
-> config/build 工程化文件配置  
+> config/build 工程化文件配置
 
-## eslint 
+## eslint
 see https://github.com/feross/standard
 更多配置参考：
 "no-alert": 0,//禁止使用alert confirm prompt
@@ -215,3 +215,12 @@ see https://github.com/feross/standard
 
 ## Browser Support
 Modern browsers and Internet Explorer 9+.
+
+## 路径
+Desktop/Total/project/quanjian/backend/src/quanjian.Web.Host
+
+Desktop/Total/project/quanjian/frontend/
+
+添加这个头，那个“Bearer ”+accesstoken
+用户是admin
+密码123qwe

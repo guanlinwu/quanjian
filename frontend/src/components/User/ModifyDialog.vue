@@ -62,7 +62,7 @@ export default {
         date: '',
         phone: ''
       },
-      labelPosition: 'left',
+      labelPosition: 'right',
       //是否是累积会员
       isLeiJi: false,
       //表单匹配规则

@@ -113,6 +113,8 @@ import LeftNav from 'components/LeftNav';
 import AddDialog from 'components/User/AddDialog';
 import ModifyDialog from 'components/User/ModifyDialog';
 
+import {authenticate, getUsers} from '@/api/user';
+
 export default {
   name: 'user',
   data () {
@@ -184,6 +186,15 @@ export default {
   created () {
     this.$bus.on('toggleAddFormVisible', this.toggleAddFormVisible);
     this.$bus.on('toggleModifyFormVisible', this.toggleModifyFormVisible);
+    authenticate({
+      userNameOrEmailAddress: 'admin',
+      password: '123qwe'
+    }).then((result) => {
+      console.log(result);
+      getUsers().then((result) => {
+        console.log(result);
+      });
+    });
   },
   methods: {
     //搜索框查询建议

@@ -39,6 +39,7 @@ module.exports = {
     "one-var": ["error", { "initialized": "always", "uninitialized": "never" }],
     "spaced-comment": 0,
     //块语句内行首行尾是否要空行
-    "padded-blocks": 0
+    "padded-blocks": 0,
+    "one-var": 0
   }
 }
