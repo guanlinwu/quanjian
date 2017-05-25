@@ -5,15 +5,18 @@ import App from './App';
 import router from './router';
 import ElementUI from 'element-ui';
 import VueBus from 'vue-bus';
+import PublicCore from '@/utils/publicCore.js';
+
 
 import 'element-ui/lib/theme-default/index.css';
-import axios from 'axios';
-Vue.prototype.axios = axios;
+
 Vue.use(ElementUI);
 Vue.use(VueBus);
 
+Vue.prototype.$publicCore = new PublicCore(Vue);
 Vue.config.productionTip = false;
 
+window.testVue = new Vue();
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

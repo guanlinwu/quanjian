@@ -40,6 +40,8 @@ module.exports = {
     "spaced-comment": 0,
     //块语句内行首行尾是否要空行
     "padded-blocks": 0,
-    "one-var": 0
+    "one-var": 0,
+    //处理错误
+    "handle-callback-err": 0
   }
 }

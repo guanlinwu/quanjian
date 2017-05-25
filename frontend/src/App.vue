@@ -1,19 +1,43 @@
 <template>
   <div id="app">
-    <head-box></head-box>
+    <head-box :isLogin="isLogin"></head-box>
     <div class="g-container">
-      <router-view></router-view>
+      <router-view :isLogin="isLogin"></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import Head from 'components/HeadBox/index';
+import Head from '@/components/HeadBox/index';
 
 export default {
   name: 'app',
+  data () {
+    return {
+      isLogin: false
+    }
+  },
   components: {
     'head-box': Head
+  },
+  created () {
+    this.$bus.on('setLogin', this.setLogin);
+  },
+  // computed: {
+  //   isLogin() {
+  //     return this.$publicCore.isLogin()
+  //   }
+  // },
+  mounted () {
+    //通过获取本地存储token的存在判断是否登录
+    this.isLogin = this.$publicCore.isLogin();
+    //如果没有登录，则弹出登录模态框
+    !this.isLogin && this.$publicCore.showLogin();
+  },
+  methods: {
+    setLogin (boolean) {
+      this.isLogin = boolean;
+    }
   }
 }
 </script>

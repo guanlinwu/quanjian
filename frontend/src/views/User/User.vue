@@ -5,7 +5,7 @@
       <el-col :span="3">
         <LeftNav :navArr="navArr"></LeftNav>
       </el-col>
-      <el-col class="g-container-right" :span="21">
+      <el-col class="g-container-right" :span="21" v-if="isLogin">
         <div class="head-box">
           <el-autocomplete
             class="inline-input"
@@ -26,7 +26,8 @@
           <el-col :span="24">
             <el-table
               :data="tableData"
-              style="width: 100%">
+              style="width: 100%"
+              >
               <el-table-column
                 type="index"
                 width="50">
@@ -109,11 +110,9 @@
 </template>
 
 <script>
-import LeftNav from 'components/LeftNav';
-import AddDialog from 'components/User/AddDialog';
-import ModifyDialog from 'components/User/ModifyDialog';
-
-import {authenticate, getUsers} from '@/api/user';
+import LeftNav from '@/components/LeftNav';
+import AddDialog from '@/components/User/AddDialog';
+import ModifyDialog from '@/components/User/ModifyDialog';
 
 export default {
   name: 'user',
@@ -178,6 +177,7 @@ export default {
       }]
     }
   },
+  props: ['isLogin'],
   components: {
     LeftNav,
     AddDialog,
@@ -186,15 +186,6 @@ export default {
   created () {
     this.$bus.on('toggleAddFormVisible', this.toggleAddFormVisible);
     this.$bus.on('toggleModifyFormVisible', this.toggleModifyFormVisible);
-    authenticate({
-      userNameOrEmailAddress: 'admin',
-      password: '123qwe'
-    }).then((result) => {
-      console.log(result);
-      getUsers().then((result) => {
-        console.log(result);
-      });
-    });
   },
   methods: {
     //搜索框查询建议

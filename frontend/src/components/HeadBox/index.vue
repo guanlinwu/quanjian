@@ -13,7 +13,7 @@
             <TopNav></TopNav>
         </el-col>
             <el-col :span="2">
-                <Login></Login>
+                <Login :isLogin="isLogin"></Login>
             </el-col>
         </el-row>
     </section>
@@ -29,6 +29,7 @@ export default {
     TopNav,
     Login
   },
+  props: ['isLogin'],
   data () {
     return {
     }
@@ -43,7 +44,7 @@ export default {
 }
 .logo {
     height: 60px;
-    
+
     img {
         display: inline-block;
         height: 50px;

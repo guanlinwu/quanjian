@@ -1,5 +1,5 @@
 <template>
-  <div class="sale">
+  <div class="goods">
     <el-row :gutter="20">
       <el-col :span="3">
         <LeftNav :navArr="navArr"></LeftNav>
@@ -15,24 +15,19 @@
 import LeftNav from '@/components/LeftNav';
 
 export default {
-  name: 'sale',
+  name: 'goods',
   data () {
     return {
       navArr: [
         {
-          text: '会员半价',
+          text: '商品信息',
           icon: 'el-icon-message',
-          routeto: '/sale/half'
+          routeto: '/goods/goodsinfo'
         },
         {
-          text: '原价报单',
+          text: '库存管理',
           icon: 'el-icon-message',
-          routeto: '/sale/original'
-        },
-        {
-          text: '会员充值',
-          icon: 'el-icon-message',
-          routeto: '/sale/recharge'
+          routeto: '/goods/stock'
         }
       ]
     }

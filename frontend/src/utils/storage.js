@@ -28,5 +28,5 @@ class Storage {
     return this;
   }
 }
-
+window.Storage = new Storage();
 export default new Storage();

@@ -3,9 +3,7 @@
  */
 import axiosEx from '@/utils/axiosEx';
 import storage from '@/utils/storage';
-window.storage = storage
 /**
- *
  * 获取授权token
  * @param {Object} options 包含账号和密码
  * @return
@@ -21,16 +19,20 @@ export const authenticate = (options) => {
         rememberClient: true
       }
     }).then((res) => {
-      console.log(res)
+      // console.log(res)
       //存储token
       storage.set('token', res.data.result.accessToken);
-      resolve(res.data.result);
+      // resolve(res.data.result);
     }).catch((error) => {
       reject(error);
     });
   });
 };
 
+/**
+ * 获取用户信息 需要token
+ * @return
+ */
 export const getUsers = () => {
   return new Promise((resolve, reject) => {
     let token = storage.get('token');
@@ -40,10 +42,9 @@ export const getUsers = () => {
         url: '/api/services/app/User/GetUsers',
         headers: {'Authorization': 'Bearer ' + token}
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         //存储token
-        storage.set('token', res.data.result.accessToken);
-        resolve(res.data.result);
+        resolve(res.data.result.items[0]);
       }).catch((error) => {
         reject(error);
       });

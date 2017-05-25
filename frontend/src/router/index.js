@@ -8,13 +8,17 @@ import Original from '@/views/Sale/Original'
 import Recharge from '@/views/Sale/Recharge'
 
 import Credit from '@/views/Credit'
-import Goods from '@/views/Goods'
+
+import Goods from '@/views/Goods/Goods'
+import Goodsinfo from '@/views/Goods/Goodsinfo'
+import Stock from '@/views/Goods/Stock'
+
 import Sheets from '@/views/Sheets'
 import Manage from '@/views/Manage'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -55,8 +59,24 @@ export default new Router({
     },
     {
       path: '/goods',
-      name: 'goods',
-      component: Goods
+      component: Goods,
+      children: [
+        {
+          path: 'goodsinfo',
+          name: 'goods-goodsinfo',
+          component: Goodsinfo
+        },
+        {
+          path: 'stock',
+          name: 'goods-stock',
+          component: Stock
+        },
+        {
+          path: '',
+          redirect: 'goodsinfo',
+          component: Goodsinfo
+        }
+      ]
     },
     {
       path: '/sheets',
@@ -74,3 +94,13 @@ export default new Router({
     }
   ]
 })
+
+// router.beforeEach((to, from, next) => {
+//   console.log('beforeEach');
+//   console.log(Vue.prototype.$publicCore.isLogin());
+//   console.log(Vue.prototype.$publicCore);
+//   !Vue.prototype.$publicCore.isLogin() && Vue.prototype.$publicCore.showLogin();
+//   next();
+// })
+
+export default router;
