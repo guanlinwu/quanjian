@@ -156,7 +156,12 @@ export default {
     //退出登录
     loginOut () {
 
-      this.$confirm('确认退出登录？')
+      // this.$confirm('确认退出登录？')
+      this.$confirm('确认退出登录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
       .then(_ => {
         //token过期，则设置App.vue的组件的isLogin属性为false
         this.$bus.emit('setLogin', false);

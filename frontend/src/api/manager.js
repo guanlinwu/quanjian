@@ -19,10 +19,9 @@ export const authenticate = (options) => {
         rememberClient: true
       }
     }).then((res) => {
-      // console.log(res)
       //存储token
       storage.set('token', res.data.result.accessToken);
-      // resolve(res.data.result);
+      resolve(res.data.result);
     }).catch((error) => {
       reject(error);
     });

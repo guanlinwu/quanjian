@@ -5,6 +5,7 @@
 ## Build Setup
 
 ``` bash
+# 如果是用cnpm，命令一样，只是npm被cnpm替代而已
 # install dependencies
 npm install
 
@@ -17,25 +18,57 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
-访问 http://localhost:8080/#/
+访问 http://localhost:8080
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-## 文件夹说明
-> src              项目开发文件
->> api             后端请求文件
->> components      vue  组件
->> views           vue  容器
->> router vue      路由配置
->> App.vue         入口vue容器
->> main.js         入口js
->>
+### 如果是npm网速不好的机子，最好使用cnpm或者nrm
+- 安装cnpm
+``` bash
+# 方法1 使用定制的 cnpm (gzip 压缩支持) 命令行工具代替默认的 npm:
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+# 方法2 直接通过添加 npm 参数 alias 一个新命令:
 
-> config/build 工程化文件配置
+alias cnpm="npm --registry=https://registry.npm.taobao.org \
+--cache=$HOME/.npm/.cache/cnpm \
+--disturl=https://npm.taobao.org/dist \
+--userconfig=$HOME/.cnpmrc"
+
+# Or alias it in .bashrc or .zshrc
+$ echo '\n#alias for cnpm\nalias cnpm="npm --registry=https://registry.npm.taobao.org \
+  --cache=$HOME/.npm/.cache/cnpm \
+  --disturl=https://npm.taobao.org/dist \
+  --userconfig=$HOME/.cnpmrc"' >> ~/.zshrc && source ~/.zshrc
+```
+
+## 文件夹说明
+```
+src/                 项目开发文件
+    api/             后端请求接口model
+    utils/           工具组件函数
+    styles/          样式
+    assets/          暂时存放图片
+    components/      vue  组件
+    views/           vue  容器
+        User          会员管理
+        Sale          商品销售
+        Credit        积分管理
+        Goods         商品管理
+        Sheet         报表统计
+        Manage        管理人员
+    router/          vue   路由配置
+    App.vue          入口vue容器
+    main.js          入口js
+
+
+config/             工程化文件配置
+build/              工程化文件
+```
 
 ## eslint
 see https://github.com/feross/standard
 更多配置参考：
+```javascript
 "no-alert": 0,//禁止使用alert confirm prompt
 "no-array-constructor": 2,//禁止使用数组构造器
 "no-bitwise": 0,//禁止使用按位运算符
@@ -210,17 +243,19 @@ see https://github.com/feross/standard
 "wrap-iife": [2, "inside"],//立即执行函数表达式的小括号风格
 "wrap-regex": 0,//正则表达式字面量用小括号包起来
 "yoda": [2, "never"]//禁止尤达条件
-
+```
 
 
 ## Browser Support
 Modern browsers and Internet Explorer 9+.
 
 ## 路径
+
+``` bash
 Desktop/Total/project/quanjian/backend/src/quanjian.Web.Host
-
 Desktop/Total/project/quanjian/frontend/
+```
 
-添加这个头，那个“Bearer ”+accesstoken
-用户是admin
-密码123qwe
+## 接口
+- 登录
+  + 添加这个头，那个“Bearer ”+accesstoken，用户是admin，密码123qwe

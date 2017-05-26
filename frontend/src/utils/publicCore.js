@@ -21,9 +21,9 @@ class PublicCore {
    * @returns
    * @memberof PublicCore
    */
-  // setToken (token) {
-  //   return storage.set('token', token);
-  // }
+  setToken (token) {
+    return storage.set('token', token);
+  }
   /**
    * 清楚token
    * @returns

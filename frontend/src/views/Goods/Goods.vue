@@ -4,7 +4,7 @@
       <el-col :span="3">
         <LeftNav :navArr="navArr"></LeftNav>
       </el-col>
-      <el-col :span="21" v-if="isLogin">
+      <el-col class="g-container-right" :span="21" v-if="isLogin">
         <router-view></router-view>
       </el-col>
     </el-row>

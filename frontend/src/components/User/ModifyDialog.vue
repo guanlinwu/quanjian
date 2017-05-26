@@ -1,6 +1,6 @@
 <template>
   <div class="user-dialog">
-    <el-dialog  title="会员信息" custom-class="modify-dialog" :visible.sync="dialogFormVisible" :before-close="handleToggleFormVisible">
+    <el-dialog  title="修改会员信息" custom-class="modify-dialog" :visible.sync="dialogFormVisible" :before-close="handleToggleFormVisible">
       <el-form :inline="true" :model="userform" ref="userform" :rules="rules" :label-position="labelPosition">
           <el-form-item label="姓名" label-width="120px" prop="name">
             <el-input v-model="userform.name" auto-complete="off"></el-input>
@@ -46,7 +46,7 @@
 
 <script>
 export default {
-  name: 'user-dialog',
+  name: 'user-modify-dialog',
   data () {
     return {
       //表单数据

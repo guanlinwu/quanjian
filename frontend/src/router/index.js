@@ -10,7 +10,7 @@ import Recharge from '@/views/Sale/Recharge'
 import Credit from '@/views/Credit'
 
 import Goods from '@/views/Goods/Goods'
-import Goodsinfo from '@/views/Goods/Goodsinfo'
+import Goodsinfo from '@/views/Goods/GoodsInfo'
 import Stock from '@/views/Goods/Stock'
 
 import Sheets from '@/views/Sheets'
