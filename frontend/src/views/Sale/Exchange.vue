@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'hello',
+  name: 'exchange',
   data () {
     return {
       msg: '权健'

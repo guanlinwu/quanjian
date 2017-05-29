@@ -5,7 +5,9 @@ import User from '@/views/User/User'
 import Sale from '@/views/Sale/Sale'
 import Half from '@/views/Sale/Half'
 import Original from '@/views/Sale/Original'
-import Recharge from '@/views/Sale/Recharge'
+import Exchange from '@/views/Sale/Exchange'
+import FirstRecharge from '@/views/Sale/FirstRecharge'
+import AgainRecharge from '@/views/Sale/AgainRecharge'
 
 import Credit from '@/views/Credit'
 
@@ -41,9 +43,19 @@ const router = new Router({
           component: Original
         },
         {
-          path: 'recharge',
-          name: 'sale-recharge',
-          component: Recharge
+          path: 'firstRecharge',
+          name: 'sale-first-recharge',
+          component: FirstRecharge
+        },
+        {
+          path: 'againRecharge',
+          name: 'sale-again-recharge',
+          component: AgainRecharge
+        },
+        {
+          path: 'exchange',
+          name: 'sale-exchange',
+          component: Exchange
         },
         {
           path: '',

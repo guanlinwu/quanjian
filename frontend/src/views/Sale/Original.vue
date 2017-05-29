@@ -116,7 +116,7 @@
 
         <el-tab-pane name="pickCard">
           <span slot="label">
-            选购车
+            选购车-原价
             <el-badge :value="badgeNum" :max="99" class="badge">
             </el-badge>
           </span>
