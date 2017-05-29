@@ -15,13 +15,13 @@
           <el-input v-model="loginForm.name" placeholder="请输入账号或者姓名"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" placeholder="请输入密码"></el-input>
+          <el-input v-model="loginForm.password" placeholder="请输入密码" @keyup.enter.native="handleSubmitLogin('loginForm')"></el-input>
         </el-form-item>
       </el-form>
 
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="resetForm('loginForm', 'close')">取 消</el-button>
-        <el-button size="small" type="primary" @click="handleSubmitLogin('loginForm')" @keyup.enter="handleSubmitLogin('loginForm')">确 定</el-button>
+        <el-button size="small" type="primary" @click="handleSubmitLogin('loginForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -114,7 +114,6 @@ export default {
             userNameOrEmailAddress: this.loginForm.name,
             password: this.loginForm.password
           }).then((result) => {
-            console.log(result);
             this.dialogVisible = false;
             this.user.name = this.loginForm.name;
             //设置App.vue的组件的isLogin属性为true
@@ -124,6 +123,7 @@ export default {
               message: this.loginForm.name + ' 登录成功',
               type: 'success'
             });
+            this.resetForm('loginForm', 'close');
           }, (error) => {
             console.log(error);
             this.$notify({

@@ -2,27 +2,27 @@
   <div class="user-dialog">
     <el-dialog title="添加会员信息" :visible.sync="dialogFormVisible" :before-close="handleToggleFormVisible">
       <el-form :inline="true" :model="userform" ref="userform" :rules="rules">
-          <el-form-item label="姓名" label-width="100px" prop="name">
+          <el-form-item label="姓名" label-width="110px" prop="name">
             <el-input v-model="userform.name" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="编号" label-width="100px" prop="number" required>
+          <el-form-item label="编号" label-width="110px" prop="number" required>
             <el-input v-model="userform.number" auto-complete="off" type=number></el-input>
           </el-form-item>
-          <!-- 判断累积会员还是充值会员 -->
-          <el-form-item v-if="isLeiJi" key='accumulateLevel' :disabled="isLeiJi" label="累积级别" label-width="100px" prop="accumulateLevel">
-            <el-input v-model="userform.accumulateLevel" auto-complete="off" type=number></el-input>
-          </el-form-item>
-          <el-form-item v-else key='joinMoney' label="会员加盟总额" label-width="100px" prop="joinMoney">
-            <el-input v-model="userform.joinMoney" auto-complete="off" type=number></el-input>
-          </el-form-item>
-          <!-- 判断累积会员还是充值会员 end -->
-          <el-form-item label="会员身份" label-width="100px" prop="userType">
-            <el-select v-model="userform.userType" @change="handleUserTypeChange">
+          <el-form-item label="会员身份" label-width="110px" prop="userType">
+            <el-select class="select-user-type" v-model="userform.userType" @change="handleUserTypeChange">
               <el-option label="充值会员" value="chongzhi"></el-option>
               <el-option label="累积会员" value="leiji"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="联系方式" label-width="100px" prop="phone">
+          <!-- 判断累积会员还是充值会员 -->
+          <el-form-item v-if="isLeiJi" key='accumulateLevel' :disabled="isLeiJi" label="累积级别" label-width="110px" prop="accumulateLevel">
+            <el-input v-model="userform.accumulateLevel" auto-complete="off" type=number></el-input>
+          </el-form-item>
+          <el-form-item v-else key='joinMoney' label="会员加盟总额" label-width="110px" prop="joinMoney">
+            <el-input v-model="userform.joinMoney" auto-complete="off" type=number></el-input>
+          </el-form-item>
+          <!-- 判断累积会员还是充值会员 end -->
+          <el-form-item label="联系方式" label-width="110px" prop="phone">
             <el-input v-model="userform.phone" auto-complete="off" type=number></el-input>
           </el-form-item>
       </el-form>
@@ -127,5 +127,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
+.select-user-type {
+  width: 169px;
+}
 </style>

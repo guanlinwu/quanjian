@@ -63,7 +63,7 @@
 
 <script>
 export default {
-  name: 'hello',
+  name: 'stock',
   data () {
     return {
       //搜索框内容
@@ -116,6 +116,7 @@ export default {
         inputPattern: /\d+$/,
         inputErrorMessage: '库存变动量格式不正确, 必须是数字'
       }).then(({ value }) => {
+        //这里发送请求
         this.$message({
           type: type,
           message: message + value

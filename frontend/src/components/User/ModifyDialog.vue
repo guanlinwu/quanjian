@@ -18,7 +18,7 @@
             <el-input v-model="userform.joinMoney" auto-complete="off" type=number></el-input>
           </el-form-item>
           <el-form-item label="会员身份" label-width="120px" prop="userType">
-            <el-select v-model="userform.userType" @change="handleUserTypeChange">
+            <el-select class="select-user-type" v-model="userform.userType" @change="handleUserTypeChange">
               <el-option label="充值会员" value="chongzhi"></el-option>
               <el-option label="累积会员" value="leiji"></el-option>
             </el-select>
@@ -145,6 +145,10 @@ export default {
 .user {
   .modify-dialog.el-dialog {
       width: 55%;
+  }
+
+  .select-user-type {
+    width: 169px;
   }
 }
 </style>

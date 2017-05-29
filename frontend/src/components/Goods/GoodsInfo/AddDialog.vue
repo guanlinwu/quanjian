@@ -25,7 +25,7 @@
           </el-form-item>
 
           <el-form-item label="类别" label-width="100px" prop="goodsType">
-            <el-select v-model="goodsform.goodsType" @change="handleUserTypeChange">
+            <el-select class="user-type" v-model="goodsform.goodsType" @change="handleUserTypeChange">
               <el-option label="a" value="a"></el-option>
               <el-option label="b" value="b"></el-option>
             </el-select>
@@ -141,5 +141,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
+.user-type {
+  width: 169px;
+}
 </style>

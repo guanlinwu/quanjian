@@ -14,12 +14,6 @@ export default {
   name: 'left-nav',
   data () {
     return {
-    }
-  },
-  props: ['navArr'],
-  created () {
-    console.log(this.navArr);
-  },
 //   navArr: [
 //       {
 //           text: '导航一',
@@ -27,6 +21,12 @@ export default {
 //           routeto: '/user'
 //       }
 //   ]
+    }
+  },
+  props: ['navArr'],
+  created () {
+    console.log(this.navArr);
+  },
   methods: {
     handleSelect (key, keyPath) {
       console.log(key, keyPath);
