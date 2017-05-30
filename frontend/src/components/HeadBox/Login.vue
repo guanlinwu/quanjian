@@ -110,6 +110,9 @@ export default {
     handleSubmitLogin (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.$notify.info({
+            message: '登陆中，请等待······'
+          });
           authenticate({
             userNameOrEmailAddress: this.loginForm.name,
             password: this.loginForm.password
@@ -128,7 +131,7 @@ export default {
             console.log(error);
             this.$notify({
               showClose: true,
-              message: '账号或密码不正确，请重新输入',
+              message: '登录失败',
               type: 'error'
             });
           });

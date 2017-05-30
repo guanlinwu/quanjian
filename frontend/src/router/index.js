@@ -15,7 +15,11 @@ import Goods from '@/views/Goods/Goods'
 import Goodsinfo from '@/views/Goods/GoodsInfo'
 import Stock from '@/views/Goods/Stock'
 
-import Sheets from '@/views/Sheets'
+import Sheets from '@/views/Sheets/Sheets'
+import SaleRecords from '@/views/Sheets/SaleRecords'
+import Balance from '@/views/Sheets/Balance'
+import StockRecords from '@/views/Sheets/StockRecords'
+import RechargeRecords from '@/views/Sheets/RechargeRecords'
 import Manage from '@/views/Manage'
 
 Vue.use(Router)
@@ -92,8 +96,34 @@ const router = new Router({
     },
     {
       path: '/sheets',
-      name: 'sheets',
-      component: Sheets
+      component: Sheets,
+      children: [
+        {
+          path: 'saleRecords',
+          name: 'sheets-saleRecords',
+          component: SaleRecords
+        },
+        {
+          path: 'balance',
+          name: 'sheets-balance',
+          component: Balance
+        },
+        {
+          path: 'stockRecords',
+          name: 'sheets-stockRecords',
+          component: StockRecords
+        },
+        {
+          path: 'rechargeRecords',
+          name: 'sheets-rechargeRecords',
+          component: RechargeRecords
+        },
+        {
+          path: '',
+          redirect: 'saleRecords',
+          component: SaleRecords
+        }
+      ]
     },
     {
       path: '/manage',

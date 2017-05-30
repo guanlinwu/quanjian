@@ -5,21 +5,7 @@
         <LeftNav :navArr="navArr"></LeftNav>
       </el-col>
       <el-col class="g-container-right" :span="21" v-if="isLogin">
-        <div class="head-box">
-          <el-autocomplete
-            class="inline-input"
-            v-model="inputCnt"
-            icon="search"
-            :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
-            :trigger-on-focus="false"
-            @select="handleSelect"
-            :on-icon-click="handleIconClick"
-          ></el-autocomplete>
-          <el-button class="btn-add" @click="dialogAddFormVisible = true" type="primary">添加会员<i class="el-icon-plus el-icon--right"></i></el-button>
-          <el-button class="btn-batch" type="primary">批量录入<i class="el-icon-upload el-icon--right"></i></el-button>
-          <el-button type="text">批量模版下载</el-button>
-        </div>
+        <router-view></router-view>
       </el-col>
     </el-row>
   </div>
@@ -34,9 +20,24 @@ export default {
       //左边导航栏
       navArr: [
         {
-          text: '报积分',
+          text: '销售记录',
           icon: 'el-icon-message',
-          routeto: '/sheets'
+          routeto: '/sheets/saleRecords'
+        },
+        {
+          text: '营收结算',
+          icon: 'el-icon-message',
+          routeto: '/sheets/balance'
+        },
+        {
+          text: '库存明细',
+          icon: 'el-icon-message',
+          routeto: '/sheets/stockRecords'
+        },
+        {
+          text: '充值记录',
+          icon: 'el-icon-message',
+          routeto: '/sheets/rechargeRecords'
         }
       ],
       //搜索框内容
@@ -72,5 +73,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
 </style>

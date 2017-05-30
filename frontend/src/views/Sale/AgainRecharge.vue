@@ -30,12 +30,12 @@
                   <el-option label="银行卡" value="bandcard"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item :style="{marginBottom: '10px'}" label="加盟金额" label-width="100px" prop="price"
+              <el-form-item :style="{marginBottom: '10px'}" label="充值金额" label-width="100px" prop="price"
                 :rules="[
-                  { required: true, message: '请输入加盟金额', trigger: 'blur' },
+                  { required: true, message: '请输入充值金额', trigger: 'blur' },
                 ]"
               >
-                <el-input size="small" placeholder="请输入加盟金额" v-model="payForm.price" auto-complete="off" type=number></el-input>
+                <el-input size="small" placeholder="请输入充值金额" v-model="payForm.price" auto-complete="off" type=number></el-input>
               </el-form-item>
             </el-form>
             <ul class="pay-info-list">
