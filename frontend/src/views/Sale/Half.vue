@@ -6,113 +6,8 @@
     <div v-else>
       <el-tabs v-model="activeName" :style="{minHeight: '768px'}" type="border-card" @tab-click="handleTabClick">
         <el-tab-pane label="产品选择" name="goodsChoose">
-
-          <el-row>
-            <el-col :span="5">
-              <div class="user-search-box">
-                <h3 class="title">会员选择</h3>
-                <el-autocomplete
-                  class="user-search-input"
-                  v-model="inputUserCnt"
-                  size="small"
-                  icon="search"
-                  :fetch-suggestions="queryUserSearch"
-                  placeholder="请输入产品名称"
-                  :trigger-on-focus="false"
-                  @select="handleUserSelect"
-                  :on-icon-click="handleIconUserClick"
-                ></el-autocomplete>
-
-                <UserCard :userData="userData"></UserCard>
-              </div>
-            </el-col>
-
-            <el-col :span="19">
-              <div class="head-box">
-                <el-select v-model="type" placeholder="请选择产品分类" class="select">
-                  <el-option
-                    v-for="item in typeArr"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-                <el-autocomplete
-                v-model="inputCnt"
-                icon="search"
-                :fetch-suggestions="querySearch"
-                placeholder="请输入产品名称"
-                :trigger-on-focus="false"
-                @select="handleSelect"
-                :on-icon-click="handleIconClick"
-              ></el-autocomplete>
-              </div>
-
-              <el-row>
-                <el-col :span="24">
-                  <el-table
-                  :data="goodsTable"
-                  style="width: 100%"
-                  >
-                  <!--<el-table-column
-                    type="index"
-                    width="50">
-                  </el-table-column>-->
-                  <el-table-column
-                    fixed
-                    prop="name"
-                    label="名称"
-                    width="120">
-                  </el-table-column>
-                  <el-table-column
-                    prop="number"
-                    label="编号"
-                    width="80">
-                  </el-table-column>
-                  <el-table-column
-                    prop="standard"
-                    label="规格"
-                    width="100">
-                  </el-table-column>
-                  <el-table-column
-                    prop="price"
-                    label="单价"
-                    width="100">
-                  </el-table-column>
-                  <el-table-column
-                    prop="converRate"
-                    label="积分折算率"
-                    width="100">
-                  </el-table-column>
-                  <el-table-column
-                    prop="credit"
-                    label="积分"
-                    width="100">
-                  </el-table-column>
-                  <el-table-column
-                    prop="isSpecial"
-                    label="特殊商品"
-                    >
-                  </el-table-column>
-                    </el-table-column>
-                    <el-table-column label="操作" width="80" fixed="right">
-                      <template scope="scope">
-                        <el-button @click="handleAddGoods(scope.$index, scope.row)"
-                          size="small"
-                          type="primary"
-                          >添加</el-button>
-
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-col>
-              </el-row>
-            </el-col>
-
-          </el-row>
+          <GoodsChoose></GoodsChoose>
         </el-tab-pane>
-
-
 
         <el-tab-pane name="pickCard">
           <span slot="label">
@@ -245,7 +140,7 @@
 </template>
 
 <script>
-// import UserSearchBox from '@/components/Sale/UserSearchBox';
+import GoodsChoose from '@/components/Sale/GoodsChoose';
 import UserCard from '@/components/Sale/UserCard';
 
 export default {
@@ -256,22 +151,7 @@ export default {
       isBilling: true,
       //当前活跃tab名称
       activeName: 'goodsChoose',
-      //产品搜索框内容
-      inputCnt: '',
-      //产品搜索框查询建议列表数据
-      recommends: [
-        { 'value': '2222' },
-        { 'value': 'Hot honey 首尔炸鸡（仙霞路）' },
-        { 'value': '新旺角茶餐厅' }
-      ],
-      //用户搜索框内容
-      inputUserCnt: '',
-      //用户搜索框查询建议列表数据
-      recommendsUser: [
-        { 'value': '2222' },
-        { 'value': 'Hot honey 首尔炸鸡（仙霞路）' },
-        { 'value': '新旺角茶餐厅' }
-      ],
+
       //搜索出用户数据
       userData: [
         {
@@ -301,25 +181,6 @@ export default {
           isMoney: true
         }
       ],
-      //产品类型选择select表单数据
-      typeArr: [{
-        value: '选项1',
-        label: '1'
-      }, {
-        value: '选项2',
-        label: '2'
-      }, {
-        value: '选项3',
-        label: '3'
-      }, {
-        value: '选项4',
-        label: '4'
-      }, {
-        value: '选项5',
-        label: '5'
-      }],
-      //产品类型
-      type: '',
       //支付表单
       payForm: {
         //支付方式
@@ -327,35 +188,6 @@ export default {
         //是否累积
         isLeiji: 1
       },
-      //产品选择表格数据
-      goodsTable: [{
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '200',
-        converRate: '0.9',
-        credit: '200',
-        isSpecial: '是',
-        goodsType: '本草'
-      }, {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '200',
-        converRate: '0.9',
-        credit: '200',
-        isSpecial: '是',
-        goodsType: '本草'
-      }, {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '200',
-        converRate: '0.9',
-        credit: '200',
-        isSpecial: '是',
-        goodsType: '本草'
-      }],
       //选购车选购产品信息
       pickGoodsTable: [{
         number: '0123',
@@ -420,6 +252,7 @@ export default {
     }
   },
   components: {
+    GoodsChoose,
     UserCard
   },
   computed: {
@@ -429,36 +262,9 @@ export default {
     }
   },
   methods: {
+    //tab
     handleTabClick (tab, event) {
       console.log(tab);
-    },
-    //搜索框查询建议
-    querySearch (queryString, cb) {
-      // 调用 callback 返回建议列表的数据
-      cb(this.recommends);
-    },
-    //搜索框查询按钮
-    handleIconClick () {
-    },
-    //搜索框处理选中建议项
-    handleSelect (item) {
-      console.log(item);
-    },
-    //用户搜索框查询建议
-    queryUserSearch (queryString, cb) {
-      // 调用 callback 返回建议列表的数据
-      cb(this.recommendsUser);
-    },
-    //用户搜索框查询按钮
-    handleIconUserClick () {
-    },
-    //用户搜索框处理选中建议项
-    handleUserSelect (item) {
-      console.log(item);
-    },
-    //添加商品
-    handleAddGoods (index, row) {
-      console.log(row)
     },
     //从选购车删除商品
     handleDeletePickGoods (index, row) {

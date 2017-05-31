@@ -61,4 +61,10 @@ export default {
 .g-container-right {
   padding: 10px 0 0 0;
 }
+
+/*分页器*/
+.u-pagination {
+  margin: 16px 0 0 0;
+  text-align: center;
+}
 </style>

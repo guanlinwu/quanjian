@@ -20,8 +20,8 @@ export const authenticate = (options) => {
       }
     }).then((res) => {
       //存储token
-      storage.set('token', res.data.result.accessToken);
-      resolve(res.data.result);
+      storage.set('token', res.data.accessToken);
+      resolve(res.data);
     }).catch((error) => {
       reject(error);
     });
@@ -41,14 +41,13 @@ export const getUsers = () => {
         url: '/api/services/app/User/GetUsers',
         headers: {'Authorization': 'Bearer ' + token}
       }).then((res) => {
-        // console.log(res)
         //存储token
-        resolve(res.data.result.items[0]);
+        resolve(res.data);
       }).catch((error) => {
         reject(error);
       });
     } else {
-      reject({status: '-1000', msg: 'token不存在于storage中'});
+      reject({success: false, msg: 'token不存在于storage中'});
     }
   });
 };

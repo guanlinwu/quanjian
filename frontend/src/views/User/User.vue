@@ -30,7 +30,7 @@
               >
               <el-table-column
                 type="index"
-                width="50">
+                width="80">
               </el-table-column>
               <el-table-column
                 fixed
@@ -56,22 +56,22 @@
               <el-table-column
                 prop="joinMoney"
                 label="会员加盟总额"
-                width="100">
+                width="120">
               </el-table-column>
               <el-table-column
                 prop="joinMoneyRest"
                 label="会员加盟余额"
-                width="100">
+                width="120">
               </el-table-column>
               <el-table-column
                 prop="accumulateCost"
                 label="累积消费金额"
-                width="100">
+                width="120">
               </el-table-column>
               <el-table-column
                 prop="accumulateLevel"
                 label="累积消费级别"
-                width="100">
+                width="120">
               </el-table-column>
               <el-table-column
                 prop="date"
@@ -81,8 +81,9 @@
               <el-table-column
                 prop="phone"
                 label="电话"
-                width="130">
+               >
               </el-table-column>
+
               <el-table-column label="操作" width="140" fixed="right">
                 <template scope="scope">
                   <el-button @click="handleModify(scope.$index, scope.row)"
@@ -98,6 +99,13 @@
           </el-col>
         </el-row>
 
+        <!--分页器-->
+        <div class="u-pagination">
+          <el-pagination
+            layout="prev, pager, next"
+            :total="1000">
+          </el-pagination>
+        </div>
       </el-col>
     </el-row>
 
@@ -158,6 +166,138 @@ export default {
         userType: '充值会员',
         joinMoney: '7500',
         joinMoneyRest: '35003',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
+        accumulateCost: '3800',
+        accumulateLevel: '7500',
+        date: '2016-05-02',
+        phone: '13589980898'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        credit: '3453',
+        userType: '累积会员',
+        joinMoney: '7500',
+        joinMoneyRest: '35004',
         accumulateCost: '3800',
         accumulateLevel: '7500',
         date: '2016-05-02',
