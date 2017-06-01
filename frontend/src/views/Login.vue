@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-row :gutter="20">
-
+      登录
     </el-row>
   </div>
 </template>
@@ -36,9 +36,7 @@ export default {
       }]
     }
   },
-  props: ['isLogin'],
   components: {
-    LeftNav
   }
 }
 </script>

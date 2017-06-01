@@ -10,7 +10,7 @@
         </div>
         </el-col>
         <el-col :span="16">
-            <TopNav></TopNav>
+            <TopNav v-if="isLogin"></TopNav>
         </el-col>
             <el-col :span="2">
                 <Login :isLogin="isLogin"></Login>

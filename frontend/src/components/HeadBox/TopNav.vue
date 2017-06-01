@@ -30,28 +30,28 @@ export default {
       let path = this.$route.name,
         index = '1';
       switch (true) {
-        case /user/.test(path):
+        case /^user/.test(path):
           index = '1';
           break;
-        case /sale/.test(path):
+        case /^sale/.test(path):
           index = '2';
           break;
-        case /credit/.test(path):
+        case /^credit/.test(path):
           index = '3';
           break;
-        case /goods/.test(path):
+        case /^goods/.test(path):
           index = '4';
           break;
-        case /sheets/.test(path):
+        case /^sheets/.test(path):
           index = '5';
           break;
-        case /manage/.test(path):
+        case /^manage/.test(path):
           index = '6';
           break;
         default:
-          index = '1';
+          index = '0';
       }
-
+      console.log('index: ' + index)
       return index;
     }
   },

@@ -21,6 +21,7 @@ import Balance from '@/views/Sheets/Balance'
 import StockRecords from '@/views/Sheets/StockRecords'
 import RechargeRecords from '@/views/Sheets/RechargeRecords'
 import Manage from '@/views/Manage'
+// import Login from '@/views/Login'
 
 Vue.use(Router)
 
@@ -130,6 +131,11 @@ const router = new Router({
       name: 'manage',
       component: Manage
     },
+    // {
+    //   path: '/login',
+    //   name: 'login',
+    //   component: Login
+    // },
     {
       path: '/',
       redirect: '/user'

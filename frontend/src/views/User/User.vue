@@ -8,11 +8,11 @@
       <el-col class="g-container-right" :span="21" v-if="isLogin">
         <div class="head-box">
           <el-autocomplete
-            class="inline-input"
+            class="search-input"
             v-model="inputCnt"
             icon="search"
             :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
+            placeholder="请输入会员姓名/编号/手机号"
             :trigger-on-focus="false"
             @select="handleSelect"
             :on-icon-click="handleIconClick"
@@ -81,6 +81,7 @@
               <el-table-column
                 prop="phone"
                 label="电话"
+                min-width="128"
                >
               </el-table-column>
 
@@ -102,7 +103,9 @@
         <!--分页器-->
         <div class="u-pagination">
           <el-pagination
+            :current-page="currentPage"
             layout="prev, pager, next"
+            @current-change="handleCurrentChange"
             :total="1000">
           </el-pagination>
         </div>
@@ -121,10 +124,14 @@ import LeftNav from '@/components/LeftNav';
 import AddDialog from '@/components/User/AddDialog';
 import ModifyDialog from '@/components/User/ModifyDialog';
 
+import {getUsersList} from '@/api/user';
+
 export default {
   name: 'user',
   data () {
     return {
+      //分页器-当前页
+      currentPage: 1,
       //是否弹窗添加会员表单
       dialogAddFormVisible: false,
       //是否弹窗修改会员表单
@@ -139,6 +146,10 @@ export default {
         { 'value': 'Hot honey 首尔炸鸡（仙霞路）' },
         { 'value': '新旺角茶餐厅' }
       ],
+      userSearchTag: {
+        timeout: 1000,
+        timer: null
+      },
       //左边导航栏
       navArr: [
         {
@@ -148,172 +159,7 @@ export default {
         }
       ],
       //表格数据
-      tableData: [{
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '750000',
-        joinMoneyRest: '35000000',
-        accumulateCost: '3800000',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '充值会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35003',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        credit: '3453',
-        userType: '累积会员',
-        joinMoney: '7500',
-        joinMoneyRest: '35004',
-        accumulateCost: '3800',
-        accumulateLevel: '7500',
-        date: '2016-05-02',
-        phone: '13589980898'
-      }]
+      tableData: []
     }
   },
   props: ['isLogin'],
@@ -323,14 +169,36 @@ export default {
     ModifyDialog
   },
   created () {
+    console.log('user create')
+    //请求加载数据
+    this.fetchUsersList(this.currentPage);
+    //绑定事件
     this.$bus.on('toggleAddFormVisible', this.toggleAddFormVisible);
     this.$bus.on('toggleModifyFormVisible', this.toggleModifyFormVisible);
   },
   methods: {
     //搜索框查询建议
     querySearch (queryString, cb) {
-      // 调用 callback 返回建议列表的数据
-      cb(this.recommends);
+      console.log(queryString);
+      //获取请求建议并且显示数据
+      const getRecommends = () => {
+        // queryString
+        // if (this.inputCnt === '') {
+        //   console.log('no queryString')
+        // }
+        console.log('请求的字段是： ' + queryString);
+        // 调用 callback 返回建议列表的数据
+        cb(this.recommends);
+      };
+
+      let _timeout = this.userSearchTag.timeout;
+
+      if (this.userSearchTag.timeout === null) {
+        this.userSearchTag.timeout = setTimeout(getRecommends, _timeout);
+      } else {
+        clearTimeout(this.userSearchTag.timeout);
+        this.userSearchTag.timeout = setTimeout(getRecommends, _timeout);
+      }
     },
     //搜索框查询按钮
     handleIconClick () {
@@ -339,6 +207,7 @@ export default {
     handleSelect (item) {
       console.log(item);
     },
+
     //设置添加会员弹窗是否显示
     toggleAddFormVisible () {
       this.dialogAddFormVisible = !this.dialogAddFormVisible;
@@ -351,6 +220,20 @@ export default {
     //处理编辑会员信息 row是当前数据, index是当前索引
     handleModify (index, row) {
       this.dialogModifyFormVisible = true;
+    },
+    //分页器-页面变换的时候
+    handleCurrentChange (val) {
+      this.currentPage = val;
+      //请求加载数据
+      this.fetchUsersList(this.currentPage);
+    },
+    //请求页数，获取用户数据列表并更新
+    fetchUsersList (currentPage) {
+      getUsersList(currentPage)
+      .then(({data}) => {
+        console.log(data);
+        this.tableData = data.usersList;
+      });
     }
   }
 }
@@ -365,10 +248,14 @@ export default {
     .btn-add, .btn-batch {
         margin-left: 20px
     }
+
+    .search-input {
+      width: 230px;
+    }
   }
 
 }
 .left-nav {
-    height: 964px;
+    min-height: 964px;
 }
 </style>

@@ -2,7 +2,10 @@
 /**
  * 所有接口都由此文件导出
  */
-let {Authenticate, GetUsers} = require('./manage.js');
+let {authenticate, getManager} = require('./manage.js'),
+  {getUsersList} = require('./user.js')
 
-exports.Authenticate = Authenticate;
-exports.GetUsers = GetUsers;
+exports.authenticate = authenticate;
+exports.getManager = getManager;
+
+exports.getUsersList = getUsersList;

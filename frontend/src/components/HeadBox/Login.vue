@@ -5,8 +5,9 @@
 
     <el-dialog
       title=""
+      :close-on-click-modal="false"
       :visible.sync="dialogVisible"
-      :before-close="beforeClose"
+      :show-close="false"
       size="tiny" class="login-form"
       >
       <h3 class="title">登录</h3>
@@ -20,7 +21,6 @@
       </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="resetForm('loginForm', 'close')">取 消</el-button>
         <el-button size="small" type="primary" @click="handleSubmitLogin('loginForm')">确 定</el-button>
       </span>
     </el-dialog>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {authenticate, getUsers} from '@/api/manager';
+import {authenticate, getManager} from '@/api/manager';
 
 export default {
   name: 'login',
@@ -91,9 +91,9 @@ export default {
     isLogin () {
       console.log('isLogin ' + this.isLogin);
       if (this.isLogin) {
-        getUsers().then((result) => {
-          console.log(result);
-          this.user.name = result.name;
+        getManager().then((data) => {
+          console.log(data);
+          this.user.name = data.name;
         }, (error) => {
           //token过期，则设置App.vue的组件的isLogin属性为false
           this.$bus.emit('setLogin', false);
@@ -123,7 +123,7 @@ export default {
             this.$bus.emit('setLogin', true);
             this.$notify({
               showClose: true,
-              message: this.loginForm.name + ' 登录成功',
+              message: this.loginForm.name + '， 登录成功',
               type: 'success'
             });
             this.resetForm('loginForm', 'close');
@@ -153,12 +153,8 @@ export default {
       }
       !!this.$refs[formName] && this.$refs[formName].resetFields();
     },
-    beforeClose () {
-      this.resetForm('loginForm', 'close');
-    },
     //退出登录
     loginOut () {
-
       // this.$confirm('确认退出登录？')
       this.$confirm('确认退出登录?', '提示', {
         confirmButtonText: '确定',

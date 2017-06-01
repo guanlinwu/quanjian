@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <head-box :isLogin="isLogin"></head-box>
-    <div class="g-container">
-      <router-view :isLogin="isLogin"></router-view>
+    <div class="g-container" v-if="isLogin">
+      <keep-alive><router-view :isLogin="isLogin"></router-view></keep-alive>
     </div>
   </div>
 </template>
@@ -14,6 +14,7 @@ export default {
   name: 'app',
   data () {
     return {
+      // 全局登录状态
       isLogin: false
     }
   },
@@ -21,13 +22,9 @@ export default {
     'head-box': Head
   },
   created () {
+    //设置登录全局状态
     this.$bus.on('setLogin', this.setLogin);
   },
-  // computed: {
-  //   isLogin() {
-  //     return this.$publicCore.isLogin()
-  //   }
-  // },
   mounted () {
     //通过获取本地存储token的存在判断是否登录
     this.isLogin = this.$publicCore.isLogin();
@@ -54,12 +51,12 @@ export default {
 
 .g-container {
   width: 100%;
-  height: 964px;
+  min-height: 964px;
   background: #D3DCE6;
 }
 
 .g-container-right {
-  padding: 10px 0 0 0;
+  padding: 10px 0 30px 0;
 }
 
 /*分页器*/

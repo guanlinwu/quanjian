@@ -12,7 +12,6 @@ app.all('*',function (req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
 
-  console.log(req.method);
   if (req.method == 'OPTIONS') {
     res.sendStatus(200);
   }
@@ -24,13 +23,18 @@ app.all('*',function (req, res, next) {
 // 构造请求
 for (let key in mockJson) {
   if (mockJson.hasOwnProperty(key)) {
-    let element = mockJson[key],
-       method = element.method,
+    let element = mockJson[key];
+    let method = element.method,
        url = element.url,
-       data = element.data;
-
+       body = element.body;
     app[method](url, (req, res) => {
-      res.send(JSON.stringify(data));
+      //如果定义回调函数
+      if (element.callbackData) {
+        let newData = element.callbackData(body, req, res);
+        res.send(JSON.stringify(newData));
+      } else {
+        res.send(JSON.stringify(body));
+      }
     });
   }
 }

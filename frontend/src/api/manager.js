@@ -29,16 +29,16 @@ export const authenticate = (options) => {
 };
 
 /**
- * 获取用户信息 需要token
+ * 获取管理员信息 需要token
  * @return
  */
-export const getUsers = () => {
+export const getManager = () => {
   return new Promise((resolve, reject) => {
     let token = storage.get('token');
     if (token) {
       axiosEx({
         method: 'get',
-        url: '/api/services/app/User/GetUsers',
+        url: '/api/services/app/Manager/GetManager',
         headers: {'Authorization': 'Bearer ' + token}
       }).then((res) => {
         //存储token
