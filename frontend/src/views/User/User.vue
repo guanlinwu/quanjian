@@ -17,6 +17,7 @@
             @select="handleSelect"
             :on-icon-click="handleIconClick"
           ></el-autocomplete>
+          <el-button class="btn-add" @click="resetUsersList(1)" type="primary">显示全部会员<i class="el-icon-menu el-icon--right"></i></el-button>
           <el-button class="btn-add" @click="dialogAddFormVisible = true" type="primary">添加会员<i class="el-icon-plus el-icon--right"></i></el-button>
           <el-button class="btn-batch" type="primary">批量录入<i class="el-icon-upload el-icon--right"></i></el-button>
           <el-button type="text">批量模版下载</el-button>
@@ -93,6 +94,7 @@
                   <el-button
                     size="small"
                     type="danger"
+                    @click="handleDelete(scope.$index, scope.row)"
                     >删除</el-button>
                 </template>
               </el-table-column>
@@ -106,7 +108,7 @@
             :current-page="currentPage"
             layout="prev, pager, next"
             @current-change="handleCurrentChange"
-            :total="1000">
+            :total="totalPage">
           </el-pagination>
         </div>
       </el-col>
@@ -114,7 +116,7 @@
 
     <!--弹窗-->
     <AddDialog :dialogAddFormVisible='dialogAddFormVisible'></AddDialog>
-    <ModifyDialog :dialogModifyFormVisible='dialogModifyFormVisible'></ModifyDialog>
+    <ModifyDialog :userform='userform' :dialogModifyFormVisible='dialogModifyFormVisible'></ModifyDialog>
 
   </div>
 </template>
@@ -124,7 +126,7 @@ import LeftNav from '@/components/LeftNav';
 import AddDialog from '@/components/User/AddDialog';
 import ModifyDialog from '@/components/User/ModifyDialog';
 
-import {getUsersList} from '@/api/user';
+import {getUsersList, getUsersRecommend, getUsersItem, deleteUser} from '@/api/user';
 
 export default {
   name: 'user',
@@ -132,6 +134,8 @@ export default {
     return {
       //分页器-当前页
       currentPage: 1,
+      //分页器-总页数 1页 = 10
+      totalPage: 10,
       //是否弹窗添加会员表单
       dialogAddFormVisible: false,
       //是否弹窗修改会员表单
@@ -142,9 +146,6 @@ export default {
       inputCnt: '',
       //搜索框查询建议列表数据
       recommends: [
-        { 'value': '三全鲜食（北新泾店）' },
-        { 'value': 'Hot honey 首尔炸鸡（仙霞路）' },
-        { 'value': '新旺角茶餐厅' }
       ],
       userSearchTag: {
         timeout: 1000,
@@ -159,7 +160,12 @@ export default {
         }
       ],
       //表格数据
-      tableData: []
+      tableData: [],
+      //修改的会员数据
+      userform: {
+      },
+      //被修改的会员数据在表格中的索引号
+      modifyIndex: 0
     }
   },
   props: ['isLogin'],
@@ -175,25 +181,30 @@ export default {
     //绑定事件
     this.$bus.on('toggleAddFormVisible', this.toggleAddFormVisible);
     this.$bus.on('toggleModifyFormVisible', this.toggleModifyFormVisible);
+    this.$bus.on('updateModifyUsers', this.updateModifyUsers);
   },
   methods: {
     //搜索框查询建议
     querySearch (queryString, cb) {
-      console.log(queryString);
       //获取请求建议并且显示数据
-      const getRecommends = () => {
+      const getRecommends = (queryString) => {
         // queryString
         // if (this.inputCnt === '') {
         //   console.log('no queryString')
         // }
-        console.log('请求的字段是： ' + queryString);
-        // 调用 callback 返回建议列表的数据
-        cb(this.recommends);
+        let _queryString = queryString;
+        getUsersRecommend(_queryString)
+        .then(({data}) => {
+          this.recommends = data.recommends;
+          // 调用 callback 返回建议列表的数据
+          cb(this.recommends);
+        });
       };
 
       let _timeout = this.userSearchTag.timeout;
 
       if (this.userSearchTag.timeout === null) {
+
         this.userSearchTag.timeout = setTimeout(getRecommends, _timeout);
       } else {
         clearTimeout(this.userSearchTag.timeout);
@@ -202,37 +213,82 @@ export default {
     },
     //搜索框查询按钮
     handleIconClick () {
+
     },
     //搜索框处理选中建议项
     handleSelect (item) {
-      console.log(item);
+      let id = item.id;
+      //请求单个用户信息
+      getUsersItem(id)
+      .then(({data}) => {
+        this.tableData = new Array(data.users);
+        this.totalPage = data.totalPage ? data.totalPage * 10 : 10;
+      });
     },
-
     //设置添加会员弹窗是否显示
     toggleAddFormVisible () {
       this.dialogAddFormVisible = !this.dialogAddFormVisible;
     },
     //设置添加会员弹窗是否显示
     toggleModifyFormVisible () {
-      console.log(11)
       this.dialogModifyFormVisible = !this.dialogModifyFormVisible;
     },
     //处理编辑会员信息 row是当前数据, index是当前索引
     handleModify (index, row) {
+      this.userform = this.tableData[index];
+      this.modifyIndex = index;
       this.dialogModifyFormVisible = true;
+    },
+    //删除会员
+    handleDelete (index, row) {
+      let userform = this.tableData[index],
+        id = userform.id;
+      console.log(userform)
+      deleteUser(id)
+      .then(() => {
+        this.tableData = [
+          ...this.tableData.slice(0, index),
+          ...this.tableData.slice(index + 1)
+        ];
+        this.$notify({
+          showClose: true,
+          message: `删除成功`,
+          type: 'success'
+        });
+      });
     },
     //分页器-页面变换的时候
     handleCurrentChange (val) {
-      this.currentPage = val;
-      //请求加载数据
+      if (!(val > this.totalPage / 10)) {
+        this.currentPage = val;
+        //请求加载数据
+        this.fetchUsersList(this.currentPage);
+      }
+    },
+    // 显示全部会员，把当前页重置为第一页，把搜索框的内容清空
+    resetUsersList (page) {
+      this.inputCnt = '';
+      this.currentPage = page;
       this.fetchUsersList(this.currentPage);
+    },
+    //修改会员信息后，在页面直接更新数据
+    updateModifyUsers (userform) {
+      let _userform = userform;
+      if (_userform.id) {
+        this.tableData = [
+          ...this.tableData.slice(0, this.modifyIndex),
+          _userform,
+          ...this.tableData.slice(this.modifyIndex + 1)
+        ]
+      }
+      this.userform = {};
     },
     //请求页数，获取用户数据列表并更新
     fetchUsersList (currentPage) {
       getUsersList(currentPage)
       .then(({data}) => {
-        console.log(data);
         this.tableData = data.usersList;
+        this.totalPage = data.totalPage * 10;
       });
     }
   }

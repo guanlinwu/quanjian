@@ -6,7 +6,7 @@ import storage from '@/utils/storage';
 /**
  * 获取授权token
  * @param {Object} options 包含账号和密码
- * @return
+ * @returns
  */
 export const authenticate = (options) => {
   return new Promise((resolve, reject) => {
@@ -30,7 +30,7 @@ export const authenticate = (options) => {
 
 /**
  * 获取管理员信息 需要token
- * @return
+ * @returns
  */
 export const getManager = () => {
   return new Promise((resolve, reject) => {

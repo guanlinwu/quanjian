@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import {createUser} from '@/api/user';
+
 export default {
   name: 'user-add-dialog',
   data () {
@@ -113,8 +115,25 @@ export default {
     handleSubmit (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.handleToggleFormVisible();
           //这里写请求
+          createUser({
+            ...this.userform
+          })
+          .then(({data}) => {
+            console.log(data);
+            this.handleToggleFormVisible();
+            this.$notify({
+              showClose: true,
+              message: `创建会员${this.userform.name}成功`,
+              type: 'success'
+            });
+          }, (error) => {
+            this.$notify({
+              showClose: true,
+              message: '创建失败，请重新尝试',
+              type: 'error'
+            });
+          });
         } else {
           console.log('error submit!!');
           return false;

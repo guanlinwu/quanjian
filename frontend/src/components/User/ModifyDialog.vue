@@ -1,39 +1,39 @@
 <template>
   <div class="user-dialog">
     <el-dialog  title="修改会员信息" custom-class="modify-dialog" :visible.sync="dialogFormVisible" :before-close="handleToggleFormVisible">
-      <el-form :inline="true" :model="userform" ref="userform" :rules="rules" :label-position="labelPosition">
+      <el-form :inline="true" :model="selfuserform" ref="userform" :rules="rules" :label-position="labelPosition">
           <el-form-item label="姓名" label-width="120px" prop="name">
-            <el-input v-model="userform.name" auto-complete="off"></el-input>
+            <el-input v-model="selfuserform.name" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="编号" label-width="120px" prop="number" required>
-            <el-input v-model="userform.number" auto-complete="off" type=number></el-input>
+            <el-input v-model="selfuserform.number" auto-complete="off" type=number></el-input>
           </el-form-item>
          <el-form-item label="积分" label-width="120px" prop="credit" required>
-            <el-input v-model="userform.credit" auto-complete="off" type=number></el-input>
+            <el-input v-model="selfuserform.credit" auto-complete="off" type=number></el-input>
           </el-form-item>
           <el-form-item key='accumulateLevel' :disabled="isLeiJi" label="累积级别" label-width="120px" prop="accumulateLevel">
-            <el-input v-model="userform.accumulateLevel" auto-complete="off" type=number></el-input>
+            <el-input v-model="selfuserform.accumulateLevel" auto-complete="off" type=number></el-input>
           </el-form-item>
           <el-form-item key='joinMoney' label="会员加盟总额"  label-width="120px" prop="joinMoney">
-            <el-input v-model="userform.joinMoney" auto-complete="off" type=number></el-input>
+            <el-input v-model="selfuserform.joinMoney" auto-complete="off" type=number></el-input>
           </el-form-item>
           <el-form-item label="会员身份" label-width="120px" prop="userType">
-            <el-select class="select-user-type" v-model="userform.userType" @change="handleUserTypeChange">
-              <el-option label="充值会员" value="chongzhi"></el-option>
-              <el-option label="累积会员" value="leiji"></el-option>
+            <el-select class="select-user-type" v-model="selfuserform.userType" @change="handleUserTypeChange">
+              <el-option label="充值会员" value="充值会员"></el-option>
+              <el-option label="累积会员" value="累积会员"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="会员加盟余额" label-width="120px" prop="joinMoneyRest" required>
-            <el-input v-model="userform.joinMoneyRest" auto-complete="off" type=number></el-input>
+            <el-input v-model="selfuserform.joinMoneyRest" auto-complete="off" type=number></el-input>
           </el-form-item>
           <el-form-item label="累积消费金额" label-width="120px" prop="accumulateCost" required>
-            <el-input v-model="userform.accumulateCost" auto-complete="off" type=number></el-input>
+            <el-input v-model="selfuserform.accumulateCost" auto-complete="off" type=number></el-input>
           </el-form-item>
           <el-form-item label="累积消费级别" label-width="120px" prop="accumulateLevel" required>
-            <el-input v-model="userform.accumulateLevel" auto-complete="off" type=number></el-input>
+            <el-input v-model="selfuserform.accumulateLevel" auto-complete="off" type=number></el-input>
           </el-form-item>
           <el-form-item label="联系方式" label-width="120px" prop="phone">
-            <el-input v-model="userform.phone" auto-complete="off" type=number></el-input>
+            <el-input v-model="selfuserform.phone" auto-complete="off" type=number></el-input>
           </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -45,23 +45,25 @@
 </template>
 
 <script>
+import {modifyUser} from '@/api/user';
+
 export default {
   name: 'user-modify-dialog',
   data () {
     return {
-      //表单数据
-      userform: {
-        number: '',
-        name: '',
-        credit: '',
-        userType: '',
-        joinMoney: '',
-        joinMoneyRest: '',
-        accumulateCost: '',
-        accumulateLevel: '',
-        date: '',
-        phone: ''
-      },
+      // //表单数据
+      // userform: {
+      //   number: '',
+      //   name: '',
+      //   credit: '',
+      //   userType: '',
+      //   joinMoney: '',
+      //   joinMoneyRest: '',
+      //   accumulateCost: '',
+      //   accumulateLevel: '',
+      //   date: '',
+      //   phone: ''
+      // },
       labelPosition: 'right',
       //是否是累积会员
       isLeiJi: false,
@@ -102,11 +104,16 @@ export default {
   },
   props: [
     //是否弹窗添加会员表单
-    'dialogModifyFormVisible'
+    'dialogModifyFormVisible',
+    //表单数据
+    'userform'
   ],
   computed: {
     dialogFormVisible () {
       return this.dialogModifyFormVisible;
+    },
+    selfuserform () {
+      return this.userform;
     }
   },
   methods: {
@@ -117,10 +124,10 @@ export default {
     },
     //处理显示弹窗
     handleToggleFormVisible () {
-      this.resetForm('userform');
+      // this.resetForm('userform');
       this.$bus.emit('toggleModifyFormVisible');
     },
-    //重置表单
+    //重置表单 取消了重置表单，因为会影响数据
     resetForm (formName) {
       this.$refs[formName].resetFields();
     },
@@ -128,8 +135,29 @@ export default {
     handleSubmit (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.handleToggleFormVisible();
-          //这里写请求
+          console.log(valid);
+          // //这里写请求
+          modifyUser({
+            ...this.selfuserform
+          })
+          .then(({data}) => {
+            console.log(data);
+            this.$notify({
+              showClose: true,
+              message: `修改会员${this.selfuserform.name}成功`,
+              type: 'success'
+            });
+            //修改会员信息后，在页面直接更新数据
+            this.$bus.emit('updateModifyUsers', this.selfuserform);
+            console.log(this.selfuserform)
+            this.handleToggleFormVisible();
+          }, (error) => {
+            this.$notify({
+              showClose: true,
+              message: '修改失败，请重新尝试',
+              type: 'error'
+            });
+          });
         } else {
           console.log('error submit!!');
           return false;

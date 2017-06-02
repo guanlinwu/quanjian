@@ -2,10 +2,17 @@
 /**
  * 所有接口都由此文件导出
  */
-let {authenticate, getManager} = require('./manage.js'),
-  {getUsersList} = require('./user.js')
+let manage = require('./manage.js'),
+    user = require('./user.js')
 
-exports.authenticate = authenticate;
-exports.getManager = getManager;
+let mockJson = Object.assign({}, manage, user);
 
-exports.getUsersList = getUsersList;
+// 把key接入到exports
+for (let key in mockJson) {
+  if (mockJson.hasOwnProperty(key)) {
+    let element = mockJson[key];
+    exports[key] = element;
+  }
+}
+
+

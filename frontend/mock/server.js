@@ -2,7 +2,6 @@ let express = require('express'),
     path    = require('path');
 let app = express();
 let mockJson = require('./mockJson');
-
 // app.use(require('connect-history-api-fallback')({
 //   verbose: true
 // }));
@@ -28,6 +27,7 @@ for (let key in mockJson) {
        url = element.url,
        body = element.body;
     app[method](url, (req, res) => {
+      console.log(`url${url}`);
       //如果定义回调函数
       if (element.callbackData) {
         let newData = element.callbackData(body, req, res);
