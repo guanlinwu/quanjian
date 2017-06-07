@@ -4,8 +4,9 @@
  */
 let manage = require('./manage.js'),
     user = require('./user.js')
+    credit = require('./credit.js')
 
-let mockJson = Object.assign({}, manage, user);
+let mockJson = Object.assign({}, manage, user, credit);
 
 // 把key接入到exports
 for (let key in mockJson) {

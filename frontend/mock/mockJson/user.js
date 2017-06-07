@@ -282,7 +282,7 @@ exports.modifyUser = {
       date: '2016-05-02',
       phone: '13589980898'
     },
-    message:'创建会员成功',
+    message:'修改会员成功',
     success:true,
     error:null
   }

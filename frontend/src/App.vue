@@ -64,4 +64,9 @@ export default {
   margin: 16px 0 0 0;
   text-align: center;
 }
+
+/*搜索框*/
+.search-input {
+  width: 230px;
+}
 </style>

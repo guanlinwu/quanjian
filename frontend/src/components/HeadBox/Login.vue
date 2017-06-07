@@ -91,7 +91,7 @@ export default {
     isLogin () {
       console.log('isLogin ' + this.isLogin);
       if (this.isLogin) {
-        getManager().then((data) => {
+        getManager().then(({data}) => {
           console.log(data);
           this.user.name = data.name;
         }, (error) => {

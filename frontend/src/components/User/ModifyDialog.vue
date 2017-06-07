@@ -1,6 +1,6 @@
 <template>
   <div class="user-dialog">
-    <el-dialog  title="修改会员信息" custom-class="modify-dialog" :visible.sync="dialogFormVisible" :before-close="handleToggleFormVisible">
+    <el-dialog title="修改会员信息" custom-class="modify-dialog" :visible.sync="dialogFormVisible" :before-close="handleToggleFormVisible" @open="initOpen">
       <el-form :inline="true" :model="selfuserform" ref="userform" :rules="rules" :label-position="labelPosition">
           <el-form-item label="姓名" label-width="120px" prop="name">
             <el-input v-model="selfuserform.name" auto-complete="off"></el-input>
@@ -64,6 +64,7 @@ export default {
       //   date: '',
       //   phone: ''
       // },
+      selfuserform: {},
       labelPosition: 'right',
       //是否是累积会员
       isLeiJi: false,
@@ -111,12 +112,14 @@ export default {
   computed: {
     dialogFormVisible () {
       return this.dialogModifyFormVisible;
-    },
-    selfuserform () {
-      return this.userform;
     }
   },
   methods: {
+    // 打开弹窗进行数据初始化
+    initOpen () {
+      this.selfuserform = Object.assign({}, this.userform);
+      console.log(this.selfuserform)
+    },
     //处理select表单选中值发生变化
     handleUserTypeChange (item) {
       console.log(item);
@@ -124,8 +127,8 @@ export default {
     },
     //处理显示弹窗
     handleToggleFormVisible () {
-      // this.resetForm('userform');
       this.$bus.emit('toggleModifyFormVisible');
+      this.resetForm('userform');
     },
     //重置表单 取消了重置表单，因为会影响数据
     resetForm (formName) {
@@ -141,15 +144,13 @@ export default {
             ...this.selfuserform
           })
           .then(({data}) => {
-            console.log(data);
             this.$notify({
               showClose: true,
               message: `修改会员${this.selfuserform.name}成功`,
               type: 'success'
             });
             //修改会员信息后，在页面直接更新数据
-            this.$bus.emit('updateModifyUsers', this.selfuserform);
-            console.log(this.selfuserform)
+            this.$bus.emit('updateModifyUsers', Object.assign({}, this.selfuserform));
             this.handleToggleFormVisible();
           }, (error) => {
             this.$notify({

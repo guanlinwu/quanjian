@@ -45,7 +45,9 @@
 </template>
 
 <script>
+import {getManagersList} from '@/api/manager';
 import LeftNav from '@/components/LeftNav';
+
 export default {
   name: 'manage',
   data () {
@@ -59,24 +61,18 @@ export default {
         }
       ],
       //表格数据
-      tableData: [{
-        number: '0123',
-        name: '王小虎',
-        authority: '管理员'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        authority: '操作员'
-      }, {
-        number: '0123',
-        name: '王小虎',
-        authority: '操作员'
-      }]
+      tableData: []
     }
   },
   props: ['isLogin'],
   components: {
     LeftNav
+  },
+  created () {
+    getManagersList()
+    .then(({data}) => {
+      this.tableData = data.managersList;
+    });
   }
 }
 </script>

@@ -51,3 +51,27 @@ export const getManager = () => {
     }
   });
 };
+
+/**
+ * 获取管理员信息列表 需要token
+ * @returns
+ */
+export const getManagersList = () => {
+  return new Promise((resolve, reject) => {
+    let token = storage.get('token');
+    if (token) {
+      axiosEx({
+        method: 'get',
+        url: '/api/services/app/Manager/GetManagersList',
+        headers: {'Authorization': 'Bearer ' + token}
+      }).then((res) => {
+        //存储token
+        resolve(res.data);
+      }).catch((error) => {
+        reject(error);
+      });
+    } else {
+      reject({success: false, msg: 'token不存在于storage中'});
+    }
+  });
+};

@@ -39,3 +39,31 @@ exports.getManager = {
     error:null
   }
 };
+
+/**
+ * 获取管理员信息列表 需要token
+ */
+exports.getManagersList = {
+  url: '/api/services/app/Manager/GetManagersList',
+  method: 'get',
+  body: {
+    data:{
+      managersList: [{
+        number: '0123',
+        name: '王小虎',
+        authority: '管理员'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        authority: '操作员'
+      }, {
+        number: '0123',
+        name: '王小虎',
+        authority: '操作员'
+      }]
+    },
+    message:'获取管理员信息成功',
+    success:true,
+    error:null
+  }
+};

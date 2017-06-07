@@ -17,7 +17,7 @@
             @select="handleSelect"
             :on-icon-click="handleIconClick"
           ></el-autocomplete>
-          <el-button class="btn-add" @click="resetUsersList(1)" type="primary">显示全部会员<i class="el-icon-menu el-icon--right"></i></el-button>
+          <el-button class="btn-add" @click="resetList(1)" type="primary">显示全部会员<i class="el-icon-menu el-icon--right"></i></el-button>
           <el-button class="btn-add" @click="dialogAddFormVisible = true" type="primary">添加会员<i class="el-icon-plus el-icon--right"></i></el-button>
           <el-button class="btn-batch" type="primary">批量录入<i class="el-icon-upload el-icon--right"></i></el-button>
           <el-button type="text">批量模版下载</el-button>
@@ -147,7 +147,7 @@ export default {
       //搜索框查询建议列表数据
       recommends: [
       ],
-      userSearchTag: {
+      searchTag: {
         timeout: 1000,
         timer: null
       },
@@ -177,45 +177,56 @@ export default {
   created () {
     console.log('user create')
     //请求加载数据
-    this.fetchUsersList(this.currentPage);
+    this.fetchList(this.currentPage);
     //绑定事件
     this.$bus.on('toggleAddFormVisible', this.toggleAddFormVisible);
     this.$bus.on('toggleModifyFormVisible', this.toggleModifyFormVisible);
     this.$bus.on('updateModifyUsers', this.updateModifyUsers);
   },
   methods: {
-    //搜索框查询建议
+    /**
+     * 搜索框查询建议
+     * @param  {[String]}   queryString [搜索字段]
+     * @param  {Function} cb          [回调函数]
+     * @return
+     */
     querySearch (queryString, cb) {
-      //获取请求建议并且显示数据
+      /**
+       * [获取请求建议并且显示数据]
+       * @param  {[String]} queryString [搜索字段]
+       */
       const getRecommends = (queryString) => {
-        // queryString
-        // if (this.inputCnt === '') {
-        //   console.log('no queryString')
-        // }
         let _queryString = queryString;
         getUsersRecommend(_queryString)
         .then(({data}) => {
           this.recommends = data.recommends;
-          // 调用 callback 返回建议列表的数据
+          /**
+           * 调用 callback 返回建议列表的数据
+           */
           cb(this.recommends);
         });
       };
 
-      let _timeout = this.userSearchTag.timeout;
+      let _timeout = this.searchTag.timeout;
 
-      if (this.userSearchTag.timeout === null) {
+      if (this.searchTag.timeout === null) {
 
-        this.userSearchTag.timeout = setTimeout(getRecommends, _timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
       } else {
-        clearTimeout(this.userSearchTag.timeout);
-        this.userSearchTag.timeout = setTimeout(getRecommends, _timeout);
+        clearTimeout(this.searchTag.timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
       }
     },
-    //搜索框查询按钮
+    /**
+     * 搜索框查询按钮
+     */
     handleIconClick () {
 
     },
-    //搜索框处理选中建议项
+    /**
+     * 搜索框处理选中建议项
+     * @param  {[Object]} item [选中项]
+     */
     handleSelect (item) {
       let id = item.id;
       //请求单个用户信息
@@ -225,21 +236,33 @@ export default {
         this.totalPage = data.totalPage ? data.totalPage * 10 : 10;
       });
     },
-    //设置添加会员弹窗是否显示
+    /**
+     * 设置添加会员弹窗是否显示
+     */
     toggleAddFormVisible () {
       this.dialogAddFormVisible = !this.dialogAddFormVisible;
     },
-    //设置添加会员弹窗是否显示
+    /**
+     * 设置添加会员弹窗是否显示
+     */
     toggleModifyFormVisible () {
       this.dialogModifyFormVisible = !this.dialogModifyFormVisible;
     },
-    //处理编辑会员信息 row是当前数据, index是当前索引
+    /**
+     * 处理编辑会员信息
+     * @param  {[Number]} index [当前索引]
+     * @param  {[Object]} row   [当前数据]
+     */
     handleModify (index, row) {
       this.userform = this.tableData[index];
       this.modifyIndex = index;
       this.dialogModifyFormVisible = true;
     },
-    //删除会员
+    /**
+     * 删除会员
+     * @param  {[Number]} index [当前索引]
+     * @param  {[Object]} row   [当前数据]
+     */
     handleDelete (index, row) {
       let userform = this.tableData[index],
         id = userform.id;
@@ -257,21 +280,30 @@ export default {
         });
       });
     },
-    //分页器-页面变换的时候
+    /**
+     * 分页器-页面变换的时候
+     * @param  {[Number]} val [跳转页码]
+     */
     handleCurrentChange (val) {
       if (!(val > this.totalPage / 10)) {
         this.currentPage = val;
         //请求加载数据
-        this.fetchUsersList(this.currentPage);
+        this.fetchList(this.currentPage);
       }
     },
-    // 显示全部会员，把当前页重置为第一页，把搜索框的内容清空
-    resetUsersList (page) {
+    /**
+     * 显示全部会员，把当前页重置为第一页，把搜索框的内容清空
+     * @param  {[Number]} page [跳转页]
+     */
+    resetList (page) {
       this.inputCnt = '';
       this.currentPage = page;
-      this.fetchUsersList(this.currentPage);
+      this.fetchList(this.currentPage);
     },
-    //修改会员信息后，在页面直接更新数据
+    /**
+     * 修改会员信息后，在页面直接更新数据
+     * @param  {[Object]} userform [被修改的会员数据项]
+     */
     updateModifyUsers (userform) {
       let _userform = userform;
       if (_userform.id) {
@@ -283,8 +315,11 @@ export default {
       }
       this.userform = {};
     },
-    //请求页数，获取用户数据列表并更新
-    fetchUsersList (currentPage) {
+    /**
+     * 请求页数，获取用户数据列表并更新
+     * @param  {[Number]} currentPage [当前页]
+     */
+    fetchList (currentPage) {
       getUsersList(currentPage)
       .then(({data}) => {
         this.tableData = data.usersList;
@@ -303,10 +338,6 @@ export default {
 
     .btn-add, .btn-batch {
         margin-left: 20px
-    }
-
-    .search-input {
-      width: 230px;
     }
   }
 
