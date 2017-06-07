@@ -266,19 +266,27 @@ export default {
     handleDelete (index, row) {
       let userform = this.tableData[index],
         id = userform.id;
-      console.log(userform)
-      deleteUser(id)
-      .then(() => {
-        this.tableData = [
-          ...this.tableData.slice(0, index),
-          ...this.tableData.slice(index + 1)
-        ];
-        this.$notify({
-          showClose: true,
-          message: `删除成功`,
-          type: 'success'
+
+      this.$confirm('确认删除该会员?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      .then(_ => {
+        deleteUser(id)
+        .then(() => {
+          this.tableData = [
+            ...this.tableData.slice(0, index),
+            ...this.tableData.slice(index + 1)
+          ];
+          this.$notify({
+            showClose: true,
+            message: `删除成功`,
+            type: 'success'
+          });
         });
-      });
+      })
+      .catch(_ => {});
     },
     /**
      * 分页器-页面变换的时候

@@ -292,7 +292,7 @@ exports.modifyUser = {
  * 修改会员
  */
 exports.createUser = {
-  url: '/api/services/app/User/modifyUser',
+  url: '/api/services/app/User/CreateUser',
   method: 'post',
   body: {
     data: {

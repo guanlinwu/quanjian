@@ -2,20 +2,13 @@
   <div class="goods-type">
     <div class="header">
       <span class="title">商品分类</span>
-      <el-button class="btn-add" size="small" type="primary">新建分类</el-button>
+      <el-button @click="createType" class="btn-add" size="small" type="primary">新建分类</el-button>
     </div>
     <ul class="type-list">
-      <li class="item">
-        全部
-      </li>
-      <li class="item">
-        本草
-      </li>
-      <li class="item active">
-        本草
-      </li>
-      <li class="item">
-        本草
+      <!--<li class="item"><p >全部</p></li>-->
+      <li v-for="(item, index) in type" :class="{item: true, active: index === activeIndex - 1}">
+        <p @click="selectType(index, item)">{{item}}</p>
+        <i v-if="index !== 0" @click="deleteType(index, item)" class="el-icon-close"></i>
       </li>
     </ul>
   </div>
@@ -26,6 +19,46 @@ export default {
   name: 'goods-type',
   data () {
     return {
+      // 分类
+      type: [
+        '全部',
+        '分类1',
+        '分类2',
+        '分类3'
+      ],
+      //选中的类 从1开始计算
+      activeIndex: 3
+    }
+  },
+  methods: {
+    createType () {
+      let tips = '请输入类名';
+      this.$prompt(tips, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({value}) => {
+        //发请求
+        this.type.push(value);
+        this.$message({
+          type: 'success',
+          message: '新建分类成功'
+        });
+      })
+    },
+    selectType (index, item) {
+      this.activeIndex = index + 1;
+    },
+    deleteType (index, item) {
+      this.$confirm('确认删除该分类?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      .then(_ => {
+        this.activeIndex = 1;
+        this.type.splice(index, 1);
+      })
+      .catch(_ => {});
     }
   }
 }
@@ -56,6 +89,7 @@ export default {
     // padding: 0 16px;
 
     .item {
+      position: relative;
       padding-left: 16px;
       color: #20a0ff;
       line-height: 38px;
@@ -80,6 +114,23 @@ export default {
 
       &:not(:last-child) {
         border-bottom: 1px dashed #d3dce6;
+      }
+    }
+
+    .el-icon-close {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      padding: 5px;
+      font-size: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+
+      &:hover {
+          box-shadow: 0 0 10px red;
+          background-color: rgba(255, 73, 73, 0.8);
+          color: #fff;
       }
     }
   }

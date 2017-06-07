@@ -11,25 +11,28 @@
           <el-form-item label="价格" label-width="100px" prop="price">
             <el-input v-model="goodsform.price" auto-complete="off" type=number></el-input>
           </el-form-item>
-          <el-form-item label="积分折算率" label-width="100px" prop="price">
-            <el-input v-model="goodsform.price" auto-complete="off" type=number></el-input>
-          </el-form-item>
-          <el-form-item label="积分" label-width="100px" prop="price">
-            <el-input v-model="goodsform.credit" auto-complete="off" type=number></el-input>
-          </el-form-item>
-          <el-form-item label="特殊商品" label-width="100px" prop="isSpecial">
-            <el-radio-group v-model="goodsform.isSpecial">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-
           <el-form-item label="类别" label-width="100px" prop="goodsType">
             <el-select class="user-type" v-model="goodsform.goodsType" @change="handleUserTypeChange">
               <el-option label="a" value="a"></el-option>
               <el-option label="b" value="b"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="规格" label-width="100px" prop="standard">
+            <el-input v-model="goodsform.standard" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="积分" label-width="100px" prop="price">
+            <el-input v-model="goodsform.credit" auto-complete="off" type=number></el-input>
+          </el-form-item>
+          <el-form-item label="积分折算率" label-width="100px" prop="converRate">
+            <el-input v-model="goodsform.converRate" auto-complete="off" type=number></el-input>
+          </el-form-item>
+          <el-form-item label="特殊商品" label-width="100px" prop="isSpecial">
+            <el-radio-group v-model="goodsform.isSpecial">
+              <el-radio label="1">是</el-radio>
+              <el-radio label="0">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="handleToggleFormVisible">取 消</el-button>
@@ -40,6 +43,8 @@
 </template>
 
 <script>
+import {createGoods} from '@/api/goods';
+
 export default {
   name: 'goods-add-dialog',
   data () {
@@ -52,7 +57,7 @@ export default {
         price: '',
         converRate: '',
         credit: '',
-        isSpecial: 1,
+        isSpecial: '0',
         goodsType: ''
       },
       //表单匹配规则
@@ -89,12 +94,12 @@ export default {
         ],
         isSpecial: [
           {
-            required: true, message: '请填写特殊商品', trigger: 'blur'
+            required: true, message: '请填写特殊商品', trigger: 'change'
           }
         ],
         goodsType: [
           {
-            required: true, message: '请填写类别', trigger: 'blur'
+            required: true, message: '请填写类别', trigger: 'change'
           }
         ]
       }
@@ -104,6 +109,9 @@ export default {
     //是否弹窗添加会员表单
     'dialogAddFormVisible'
   ],
+  created () {
+    // 这里需要请求获取分类类别
+  },
   computed: {
     dialogFormVisible () {
       return this.dialogAddFormVisible;
@@ -127,8 +135,26 @@ export default {
     handleSubmit (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.handleToggleFormVisible();
           //这里写请求
+          console.log(this.goodsform)
+          createGoods({
+            ...this.goodsform
+          })
+          .then(({data}) => {
+            console.log(data);
+            this.handleToggleFormVisible();
+            this.$notify({
+              showClose: true,
+              message: `创建商品${this.goodsform.name}成功`,
+              type: 'success'
+            });
+          }, (error) => {
+            this.$notify({
+              showClose: true,
+              message: '创建失败，请重新尝试',
+              type: 'error'
+            });
+          });
         } else {
           console.log('error submit!!');
           return false;
