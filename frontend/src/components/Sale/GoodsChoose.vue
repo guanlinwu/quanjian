@@ -86,6 +86,10 @@
                 prop="isSpecial"
                 label="特殊商品"
                 >
+                <template scope="scope">
+                  <el-tag v-if="scope.row.isSpecial === '1'" type="primary">是</el-tag>
+                  <el-tag v-else type="danger">否</el-tag>
+                </template>
               </el-table-column>
                 </el-table-column>
                 <el-table-column label="操作" width="80" fixed="right">
@@ -168,7 +172,7 @@ export default {
         price: '200',
         converRate: '0.9',
         credit: '200',
-        isSpecial: '是',
+        isSpecial: '1',
         goodsType: '本草'
       }, {
         number: '0123',
@@ -177,7 +181,7 @@ export default {
         price: '200',
         converRate: '0.9',
         credit: '200',
-        isSpecial: '是',
+        isSpecial: '0',
         goodsType: '本草'
       }, {
         number: '0123',
@@ -186,7 +190,7 @@ export default {
         price: '200',
         converRate: '0.9',
         credit: '200',
-        isSpecial: '是',
+        isSpecial: '1',
         goodsType: '本草'
       }],
       //产品类型选择select表单数据

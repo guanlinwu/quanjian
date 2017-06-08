@@ -175,7 +175,7 @@ exports.getCreditRecommend = {
 /*
  * 修改 积分
  */
-exports.modifyUser = {
+exports.modifyCredit = {
   url: '/api/services/app/Credit/ModifyCredit',
   method: 'post',
   body: {

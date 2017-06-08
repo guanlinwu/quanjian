@@ -49,7 +49,7 @@ export default {
       this.activeIndex = index + 1;
     },
     deleteType (index, item) {
-      this.$confirm('确认删除该分类?', '提示', {
+      this.$confirm('删除分类会导致该分类的所有产品被删除！确认删除该分类?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
