@@ -40,6 +40,24 @@ namespace quanjian.Customers
             return Mapper.Map<CustomerDto>(customer);
         }
 
+        public async Task<CustomerDto> GetUserById(int id)
+        {
+            var customer = await _customerRepository.SingleAsync(c => c.Id == id);
+            return Mapper.Map<CustomerDto>(customer);
+        }
+
+        public async Task<CustomerDto> GetUserByPhone(string phone)
+        {
+            var customer = await _customerRepository.SingleAsync(c => c.Phone == phone);
+            return Mapper.Map<CustomerDto>(customer);
+        }
+
+        public async Task<CustomerDto> GetUserByNumber(string number)
+        {
+            var customer = await _customerRepository.SingleAsync(c => c.Number == number);
+            return Mapper.Map<CustomerDto>(customer);
+        }
+
         public async Task CreateCustomer(CreateCustomerInput input)
         {
             var customer = ObjectMapper.Map<Customer>(input);
@@ -57,14 +75,20 @@ namespace quanjian.Customers
         public async Task<PageList<CustomerDto>> QueryUserListPage(QueryCustomerInput search)
         {
             var result = new PageList<CustomerDto>();
-            var query = _customerRepository.GetAllIncluding(c => c.Name.Contains(search.search) || c.Phone.Contains(search.search) || c.Number.Contains(search.search));
+            var searchIsNull = string.IsNullOrWhiteSpace(search.Search);
+            var query = _customerRepository.GetAll().Where(c => searchIsNull||(c.Name.Contains(search.Search) || c.Phone.Contains(search.Search) || c.Number.Contains(search.Search)));
             var total = query.CountAsync();
-            var customers = query.OrderBy(c => c.Id).Skip((search.index-1) * search.pageSize).Take(search.pageSize).ToListAsync();
+            var customers = query.OrderBy(c => c.Id).Skip((search.Index-1) * search.PageSize).Take(search.PageSize).ToListAsync();
             var data = Mapper.Map<List<CustomerDto>>(await customers);
             result.totalCount = await total;
             result.list = data;
-            result.currentPage = search.index;
+            result.currentPage = search.Index;
             return result;
+        }
+
+        public async Task Delete(int id)
+        {
+            await _customerRepository.DeleteAsync(id);
         }
     }
 }

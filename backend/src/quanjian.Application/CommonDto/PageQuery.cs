@@ -9,16 +9,16 @@ namespace quanjian.CommonDto
     {
         protected PageQuery()
         {
-            index = 1;
-            pageSize = 10;
+            Index = 1;
+            PageSize = 10;
         }
         protected PageQuery(int i,int p)
         {
-            index = i;
-            pageSize = p;
+            Index = i;
+            PageSize = p;
         }
-        public int index { get; set; }
+        public int Index { get; set; }
         [Description("页面大小")]
-        public int pageSize { get; set; }
+        public int PageSize { get; set; }
     }
 }

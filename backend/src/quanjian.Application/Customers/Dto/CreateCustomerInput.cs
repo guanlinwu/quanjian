@@ -21,6 +21,10 @@ namespace quanjian.Customers.Dto
         [Required]
         public decimal Point { get; set; }
         [Required]
-        public bool IsVip { get; set; }
+        public int VipType { get; set; }
+        [Required]
+        public decimal Spend { get; set; }
+        [Required]
+        public decimal Level { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using quanjian.CommonDto;
 
@@ -15,6 +16,7 @@ namespace quanjian.Customers.Dto
         {
 
         }
-        public string search { get; set; }
+        [DisplayName("用户名、手机")]
+        public string Search { get; set; }
     }
 }
