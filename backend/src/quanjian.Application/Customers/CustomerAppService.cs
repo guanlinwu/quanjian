@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Abp.Application.Services;
 using Abp.Domain.Repositories;
 using AutoMapper;
+using quanjian.CommonDto;
 using quanjian.Customers.Dto;
 using quanjian.Entity.Customers;
 using quanjian.IRepositories.Customers;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace quanjian.Customers
 {
+    [RemoteService(false)]
     public class CustomerAppService:quanjianAppServiceBase,ICustomerAppService
     {
         private readonly ICustomerRepository _customerRepository;
@@ -47,6 +52,19 @@ namespace quanjian.Customers
             customer.Name = input.Name;
             customer.Number = input.Number;
             customer.Phone = input.Phone;
+        }
+
+        public async Task<PageList<CustomerDto>> QueryUserListPage(QueryCustomerInput search)
+        {
+            var result = new PageList<CustomerDto>();
+            var query = _customerRepository.GetAllIncluding(c => c.Name.Contains(search.search) || c.Phone.Contains(search.search) || c.Number.Contains(search.search));
+            var total = query.CountAsync();
+            var customers = query.OrderBy(c => c.Id).Skip((search.index-1) * search.pageSize).Take(search.pageSize).ToListAsync();
+            var data = Mapper.Map<List<CustomerDto>>(await customers);
+            result.totalCount = await total;
+            result.list = data;
+            result.currentPage = search.index;
+            return result;
         }
     }
 }

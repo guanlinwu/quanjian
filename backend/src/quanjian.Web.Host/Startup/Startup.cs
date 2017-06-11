@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 
 #if FEATURE_SIGNALR
@@ -78,7 +79,14 @@ namespace quanjian.Web.Host.Startup
                 options.SwaggerDoc("v1", new Info { Title = "quanjian API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
             });
+            services.ConfigureSwaggerGen(options =>
+            {
+                //Determine base path for the application.
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
 
+                //Set the comments path for the swagger json and ui.
+                options.IncludeXmlComments(basePath + "\\quanjian.Web.Host.xml");
+            });
             //Configure Abp and Dependency Injection
             return services.AddAbp<quanjianWebHostModule>(options =>
             {

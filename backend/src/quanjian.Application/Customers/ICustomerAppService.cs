@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using quanjian.CommonDto;
 using quanjian.Customers.Dto;
 
 namespace quanjian.Customers
@@ -11,6 +12,7 @@ namespace quanjian.Customers
     {
         Task<List<CustomerDto>> GetAllUserList();
         Task<List<CustomerDto>> QueryUserList(string search);
+        Task<PageList<CustomerDto>> QueryUserListPage(QueryCustomerInput search);
         Task<CustomerDto> GetUserByName(string name);
         Task CreateCustomer(CreateCustomerInput input);
         Task UpdateCustomer(UpdateCustomerInput input);

@@ -12,7 +12,6 @@ namespace quanjian.Web.Host.Startup
 {
     [DependsOn(
        typeof(quanjianWebCoreModule),
-        typeof(quanjianApplicationModule),
         typeof(AbpAspNetCoreModule))]
 
     public class quanjianWebHostModule: AbpModule
@@ -28,8 +27,8 @@ namespace quanjian.Web.Host.Startup
 
         public override void PreInitialize()
         {
-            Configuration.Modules.AbpAspNetCore()
-                .CreateControllersForAppServices(typeof(quanjianApplicationModule).GetAssembly());
+            //Configuration.Modules.AbpAspNetCore()
+            //    .CreateControllersForAppServices(typeof(quanjianApplicationModule).GetAssembly());
         }
         public override void Initialize()
         {
