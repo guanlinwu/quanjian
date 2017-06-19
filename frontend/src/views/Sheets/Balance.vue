@@ -2,25 +2,21 @@
   <div class="balance">
     <div class="head-box">
       <el-form ref="searchForm" :model="searchForm" label-width="80px">
-        <el-col :span="5">
-          <el-form-item label="操作员">
-            <el-input v-model="searchForm.manage"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="14">
-          <el-form-item label="交易时间">
-              <el-col :span="9" style="padding-left: 0; padding-right: 0;">
-                <el-date-picker type="date" placeholder="选择开始日期" v-model="searchForm.payTimeBegin"></el-date-picker>
-              </el-col>
-              <el-col class="line" :span="1" style="margin-right: 10px;">-</el-col>
-              <el-col :span="9" style="padding-left: 0; padding-right: 0;">
-                <el-date-picker type="date" placeholder="选择结束日期" v-model="searchForm.payTimeEnd"></el-date-picker>
-              </el-col>
-          </el-form-item>
-        </el-col>
-        <el-col :span="1">
-          <el-button type="primary">搜索</el-button>
-        </el-col>
+        <el-form-item class="form-item" label="操作员" label-width="60px">
+          <el-autocomplete
+              v-model="searchForm.manage"
+              :fetch-suggestions="querySearchManager"
+              placeholder="用户名称/编号/手机号"
+              :trigger-on-focus="false"
+              @select="handleSelect"
+            ></el-autocomplete>
+        </el-form-item>
+        <el-form-item class="form-item" label="交易时间">
+          <el-date-picker type="date" placeholder="选择开始日期" v-model="searchForm.payTimeBegin"></el-date-picker>
+          <span>-</span>
+          <el-date-picker type="date" placeholder="选择结束日期" v-model="searchForm.payTimeEnd"></el-date-picker>
+        </el-form-item>
+        <el-button @click="search" type="primary" style="float: right;margin-right: 16px;">搜索</el-button>
       </el-form>
     </div>
 
@@ -53,12 +49,13 @@
     </el-row>
     <div class="sum">
       <span class="title">合计收入金额：</span>
-      <span class="content">¥293849</span>
+      <span class="content">¥{{sum}}</span>
     </div>
   </div>
 </template>
 
 <script>
+import {getManagersRecommend} from '@/api/manager';
 export default {
   name: 'balance',
   data () {
@@ -92,7 +89,68 @@ export default {
         price: '232323',
         // 操作员
         manage: 'xxx'
-      }]
+      }],
+      userRecommends: [],
+      searchTag: {
+        timeout: 1000,
+        timer: null
+      }
+    }
+  },
+  computed: {
+    sum () {
+      let _sum = 0;
+      this.tableData.forEach((item) => {
+        _sum += +item.price;
+      });
+      return _sum;
+    }
+  },
+  methods: {
+    /**
+     * 搜索框查询建议
+     * @param  {[String]}   queryString [搜索字段]
+     * @param  {Function} cb          [回调函数]
+     * @return
+     */
+    querySearchManager (queryString, cb) {
+      /**
+       * [获取请求建议并且显示数据]
+       * @param  {[String]} queryString [搜索字段]
+       */
+      const getRecommends = (queryString) => {
+        let _queryString = queryString;
+        getManagersRecommend(_queryString)
+        .then(({data}) => {
+          this.userRecommends = data.recommends;
+          /**
+           * 调用 callback 返回建议列表的数据
+           */
+          cb(this.userRecommends);
+        });
+      };
+
+      let _timeout = this.searchTag.timeout;
+
+      if (this.searchTag.timeout === null) {
+
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      } else {
+        clearTimeout(this.searchTag.timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      }
+    },
+    /**
+     * 搜索框处理选中建议项
+     * @param  {[Object]} item [选中项]
+     */
+    handleSelect (item) {
+      this.searchTag.timeout = null;
+      console.log(item)
+    },
+    search () {
+      console.log('搜索字段为 ' + JSON.stringify(this.searchForm));
+      alert('搜索字段为 ' + JSON.stringify(this.searchForm));
     }
   }
 }
@@ -116,5 +174,12 @@ export default {
     font-size: 18px;
     font-weight: 600;
   }
+}
+.form-item {
+  display: inline-block;
+
+}
+.select {
+  width: 169px;
 }
 </style>

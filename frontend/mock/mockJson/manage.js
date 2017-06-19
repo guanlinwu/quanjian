@@ -67,3 +67,24 @@ exports.getManagersList = {
     error:null
   }
 };
+
+/**
+ * 查询字段
+ */
+
+exports.getManagersRecommend = {
+  url: '/api/services/app/Manager/GetManagersRecommend',
+  method: 'get',
+  body: {
+    data: {
+      recommends: [
+        { value: '管理员', id: '1' },
+        { value: '操作员1', id: '2' },
+        { value: '操作员2', id: '3' }
+      ]
+    },
+    message:'查询用户信息成功',
+    success:true,
+    error:null
+  }
+}

@@ -10,7 +10,7 @@ exports.getGoodsList = {
       totalPage: 100,
        goodsList: [{
         id: 1,
-        number: '0123',
+        number: '01231',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -20,7 +20,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 2,
-        number: '0123',
+        number: '01232',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -30,7 +30,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 3,
-        number: '0123',
+        number: '01233',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -40,7 +40,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 4,
-        number: '0123',
+        number: '01234',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -50,7 +50,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 5,
-        number: '0123',
+        number: '01235',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -60,7 +60,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 6,
-        number: '0123',
+        number: '01236',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -70,7 +70,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 7,
-        number: '0123',
+        number: '01237',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -80,7 +80,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 8,
-        number: '0123',
+        number: '01238',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -90,7 +90,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 9,
-        number: '0123',
+        number: '01239',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -100,7 +100,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 10,
-        number: '0123',
+        number: '012310',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -110,7 +110,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 11,
-        number: '0123',
+        number: '012311',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -120,7 +120,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 12,
-        number: '0123',
+        number: '012312',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -130,7 +130,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 13,
-        number: '0123',
+        number: '012313',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -140,7 +140,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 14,
-        number: '0123',
+        number: '012314',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',
@@ -150,7 +150,7 @@ exports.getGoodsList = {
         goodsType: '本草'
       }, {
         id: 15,
-        number: '0123',
+        number: '012315',
         name: '麦芽精',
         standard: '10包/盒',
         price: '200',

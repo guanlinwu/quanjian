@@ -75,3 +75,31 @@ export const getManagersList = () => {
     }
   });
 };
+
+/**
+ * 搜索建议 列表
+ *
+ * @param {string} query 可能是名字，可能是编号，可能是手机号
+ * @returns Promise
+ */
+export const getManagersRecommend = (query) => {
+  return new Promise((resolve, reject) => {
+    let token = storage.get('token');
+    if (token) {
+      axiosEx({
+        method: 'get',
+        url: '/api/services/app/Manager/GetManagersRecommend',
+        headers: {'Authorization': 'Bearer ' + token},
+        params: {
+          query
+        }
+      }).then((res) => {
+        resolve(res.data);
+      }).catch((error) => {
+        reject(error);
+      });
+    } else {
+      reject({success: false, msg: 'token不存在于storage中'});
+    }
+  });
+};

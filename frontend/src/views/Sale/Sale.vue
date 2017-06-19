@@ -28,22 +28,22 @@ export default {
           text: '原价报单',
           icon: 'el-icon-message',
           routeto: '/sale/original'
-        },
-        {
-          text: '会员首次充值',
-          icon: 'el-icon-message',
-          routeto: '/sale/firstRecharge'
-        },
-        {
-          text: '会员再次充值',
-          icon: 'el-icon-message',
-          routeto: '/sale/againRecharge'
-        },
-        {
-          text: '换货',
-          icon: 'el-icon-message',
-          routeto: '/sale/exchange'
         }
+        // {
+        //   text: '会员首次充值',
+        //   icon: 'el-icon-message',
+        //   routeto: '/sale/firstRecharge'
+        // },
+        // {
+        //   text: '会员再次充值',
+        //   icon: 'el-icon-message',
+        //   routeto: '/sale/againRecharge'
+        // },
+        // {
+        //   text: '换货',
+        //   icon: 'el-icon-message',
+        //   routeto: '/sale/exchange'
+        // }
       ]
     }
   },

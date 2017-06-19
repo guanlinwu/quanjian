@@ -6,12 +6,12 @@
     <div v-else>
       <el-tabs v-model="activeName" :style="{minHeight: '768px'}" type="border-card" @tab-click="handleTabClick">
         <el-tab-pane label="产品选择" name="goodsChoose">
-          <GoodsChoose></GoodsChoose>
+          <GoodsChoose :pickGoods="pickGoods"></GoodsChoose>
         </el-tab-pane>
 
         <el-tab-pane name="pickCard">
           <span slot="label">
-            选购车-原价
+            选购车-半价
             <el-badge :value="badgeNum" :max="99" class="badge">
             </el-badge>
           </span>
@@ -20,12 +20,12 @@
             <el-col :span="5">
               <div class="user-search-box e-pick">
                 <h3 class="title">会员信息</h3>
-                <UserCard :userData="userData"></UserCard>
+                <UserCard v-if="Object.keys(this.userData).length > 0" :userData="userData"></UserCard>
                 <div class="pay-box">
                   <el-form :model="payForm" ref="payForm" label-width="80px" label-position="left">
                     <el-form-item :style="{marginBottom: '10px'}" label="支付方式" prop="payWay"
                       :rules="[
-                        { required: true, message: '请选择支付方式', trigger: 'blur' },
+                        { required: true, message: '请选择支付方式', trigger: 'blur' }
                       ]"
                     >
                       <el-select size="small" class="select-pay-type" v-model="payForm.payWay">
@@ -45,16 +45,20 @@
                   <ul class="pay-info-list">
                     <li class="item">
                       <span>赠送积分</span>
-                      <p>6778</p>
+                      <p>{{payinfo.credit}}</p>
                     </li>
                     <li class="item">
                       <span>账单金额</span>
-                      <p class="price"><span class="yuan">¥</span>673</p>
+                      <p class="price"><span class="yuan">¥</span>{{payinfo.totalPrice}}</p>
                     </li>
+                    <!--<li class="item">
+                      <span>折后金额</span>
+                      <p class="price"><span class="yuan">¥</span>{{payinfo.discountPrice}}</p>
+                    </li>-->
                   </ul>
                   <div class="pay-action">
-                    <el-button class="btn-pay" type="success">收款</el-button>
-                    <el-button class="btn-pay" type="danger">清空</el-button>
+                    <el-button class="btn-pay" @click="settle" type="success">收款</el-button>
+                    <el-button class="btn-pay" @click="clear" type="danger">清空</el-button>
                   </div>
                 </div>
               </div>
@@ -70,7 +74,7 @@
               <el-row>
                 <el-col :span="24">
                   <el-table
-                  :data="pickGoodsTable"
+                  :data="pickGoods"
                   max-height="500"
                   style="width: 100%"
                   >
@@ -130,6 +134,7 @@
         </el-tab-pane>
       </el-tabs>
 
+
     </div>
   </div>
 </template>
@@ -139,146 +144,135 @@ import GoodsChoose from '@/components/Sale/GoodsChoose';
 import UserCard from '@/components/Sale/UserCard';
 
 export default {
-  name: 'original',
+  name: 'half',
   data () {
     return {
       //是否正在开单
       isBilling: true,
       //当前活跃tab名称
       activeName: 'goodsChoose',
-      //产品搜索框内容
-      inputCnt: '',
-      //产品搜索框查询建议列表数据
-      recommends: [
-        { 'value': '2222' },
-        { 'value': 'Hot honey 首尔炸鸡（仙霞路）' },
-        { 'value': '新旺角茶餐厅' }
-      ],
+
       //搜索出用户数据
-      userData: [
-        {
-          title: '编号:',
-          content: '0002323'
-        },
-        {
-          title: '姓名:',
-          content: '新旺角'
-        },
-        {
-          title: '会员加盟余额:',
-          content: '2002320',
-          isMoney: true
-        },
-        {
-          title: '积分总额:',
-          content: '80023'
-        },
-        {
-          title: '会员身份:',
-          content: '累积会员'
-        },
-        {
-          title: '累积消费金额:',
-          content: '23233',
-          isMoney: true
-        }
-      ],
+      userData: {},
       //支付表单
       payForm: {
         //支付方式
         payWay: '',
         //是否累积
-        isLeiji: 0
+        isLeiji: 1
       },
       //选购车选购产品信息
-      pickGoodsTable: [{
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '200',
-        converRate: '0.9',
-        credit: '200',
-        goodsType: '本草',
-        saleNum: 5
-      },
-      {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '400',
-        converRate: '0.9',
-        credit: '200',
-        goodsType: '本草',
-        saleNum: 1
-      },
-      {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '140',
-        converRate: '0.9',
-        credit: '200',
-        goodsType: '本草',
-        saleNum: 2
-      },
-      {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '140',
-        converRate: '0.9',
-        credit: '200',
-        goodsType: '本草',
-        saleNum: 2
-      },
-      {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '140',
-        converRate: '0.9',
-        credit: '200',
-        goodsType: '本草',
-        saleNum: 2
-      },
-      {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '140',
-        converRate: '0.9',
-        credit: '200',
-        goodsType: '本草',
-        saleNum: 2
-      }]
+      pickGoods: [],
+
+      //赠送积分
+      credit: 0
     }
   },
   components: {
     GoodsChoose,
     UserCard
   },
+  created () {
+    this.$bus.on('setUserData', this.setUserData);
+    this.$bus.on('addPickGoods', this.addPickGoods);
+  },
   computed: {
     //小标点数量
     badgeNum () {
-      return this.pickGoodsTable.length;
+      return this.pickGoods.length;
+    },
+    //账单金额 折后金额 赠送积分
+    payinfo () {
+      let totalPrice = 0,
+        discountPrice = 0,
+        credit = 0;
+
+      this.pickGoods.forEach((item, index) => {
+        totalPrice += item.price * item.saleNum;
+        credit += item.credit * item.converRate * item.saleNum;
+      });
+
+      discountPrice = totalPrice / 2;
+
+      return {
+        totalPrice,
+        discountPrice,
+        credit
+      };
     }
   },
   methods: {
+    //tab
     handleTabClick (tab, event) {
       console.log(tab);
     },
-    //添加商品
-    handleAddGoods (index, row) {
-      console.log(row)
-    },
     //从选购车删除商品
     handleDeletePickGoods (index, row) {
-      console.log(row)
+      this.$message({
+        message: `成功添加 ${this.pickGoods[index].name}`,
+        type: 'success',
+        duration: 1500
+      });
+      this.pickGoods.splice(index, 1);
     },
     //处理选购车项产品数量
     handleSaleNum (value) {
-      console.log(value);
-      // console.log(this.pickGoodsTable);
+      // console.log(value);
+      // console.log(this.pickGoods);
+    },
+    setUserData (userData) {
+      this.userData = userData;
+    },
+    addPickGoods (item) {
+      let hasIt = false,
+        number = item.number;
+
+      this.pickGoods.forEach((_item, index, pickGoodsArray) => {
+        let _number = _item.number;
+        /**
+         * 如果已经存在
+         */
+        if (number === _number) {
+          let newItem = {
+            ...pickGoodsArray[index],
+            saleNum: _item.saleNum + 1
+          }
+          this.pickGoods.splice(index, 1, newItem);
+          hasIt = true;
+        }
+      });
+
+      /**
+       * 如果没有存在
+       */
+      !hasIt && this.pickGoods.push({
+        ...item,
+        saleNum: 1
+      });
+
+      this.$message({
+        message: `成功添加 ${item.name}`,
+        type: 'success',
+        duration: 1500
+      });
+    },
+    //清空
+    clear () {
+      this.pickGoods = [];
+    },
+    //收款
+    settle () {
+      let discountPrice = this.payinfo.discountPrice;
+      discountPrice > 0 ? this.$message({
+        message: `收款成功， 折后金额${this.payinfo.discountPrice}`,
+        type: 'success',
+        duration: 1500
+      }) : this.$message({
+        message: `金额为0，请添加商品到选购车哦！`,
+        type: 'error',
+        duration: 1500
+      });
+      this.clear();
     }
   }
 }

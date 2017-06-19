@@ -191,7 +191,10 @@ export const modifyGoods = ({
   });
 }
 
-
+/**
+ *
+ * @param {string} id
+ */
 export const deleteGoods = (id) => {
   return new Promise((resolve, reject) => {
     let token = storage.get('token');

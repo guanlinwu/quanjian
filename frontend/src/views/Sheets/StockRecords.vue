@@ -2,25 +2,22 @@
   <div class="stock-records">
     <div class="head-box">
       <el-form ref="searchForm" :model="searchForm" label-width="80px">
-        <el-col :span="5">
-          <el-form-item label="商品">
-            <el-input v-model="searchForm.goodsName"></el-input>
-          </el-form-item>
+        <el-form-item class="form-item" label="商品" label-width="40px">
+          <el-autocomplete
+            v-model="searchForm.goodsName"
+            :fetch-suggestions="querySearchGoods"
+            placeholder="产品名称/编号"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+          ></el-autocomplete>
+        </el-form-item>
+        <el-form-item class="form-item" label="交易时间">
+          <el-date-picker type="date" placeholder="选择开始日期" v-model="searchForm.payTimeBegin"></el-date-picker>
+          <span>-</span>
+          <el-date-picker type="date" placeholder="选择结束日期" v-model="searchForm.payTimeEnd"></el-date-picker>
+        </el-form-item>
         </el-col>
-        <el-col :span="14">
-          <el-form-item label="交易时间">
-              <el-col :span="9" style="padding-left: 0; padding-right: 0;">
-                <el-date-picker type="date" placeholder="选择开始日期" v-model="searchForm.payTimeBegin"></el-date-picker>
-              </el-col>
-              <el-col class="line" :span="1" style="margin-right: 10px;">-</el-col>
-              <el-col :span="9" style="padding-left: 0; padding-right: 0;">
-                <el-date-picker type="date" placeholder="选择结束日期" v-model="searchForm.payTimeEnd"></el-date-picker>
-              </el-col>
-          </el-form-item>
-        </el-col>
-        <el-col :span="1">
-          <el-button type="primary">搜索</el-button>
-        </el-col>
+        <el-button @click="search" type="primary" style="float: right;margin-right: 16px;">搜索</el-button>
       </el-form>
     </div>
 
@@ -69,6 +66,8 @@
 </template>
 
 <script>
+import {getGoodsRecommend} from '@/api/goods';
+
 export default {
   name: 'stock-records',
   data () {
@@ -102,7 +101,59 @@ export default {
         changeType: '入库',
         changeNumber: '22',
         latestStock: '22322'
-      }]
+      }],
+      goodsRecommends: [],
+      searchTag: {
+        timeout: 1000,
+        timer: null
+      }
+    }
+  },
+  methods: {
+     /**
+     * 搜索框查询建议
+     * @param  {[String]}   queryString [搜索字段]
+     * @param  {Function} cb          [回调函数]
+     * @return
+     */
+    querySearchGoods (queryString, cb) {
+      /**
+       * [获取请求建议并且显示数据]
+       * @param  {[String]} queryString [搜索字段]
+       */
+      const getRecommends = (queryString) => {
+        let _queryString = queryString;
+        getGoodsRecommend(_queryString)
+        .then(({data}) => {
+          this.goodsRecommends = data.recommends;
+          /**
+           * 调用 callback 返回建议列表的数据
+           */
+          cb(this.goodsRecommends);
+        });
+      };
+
+      let _timeout = this.searchTag.timeout;
+
+      if (this.searchTag.timeout === null) {
+
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      } else {
+        clearTimeout(this.searchTag.timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      }
+    },
+    /**
+     * 搜索框处理选中建议项
+     * @param  {[Object]} item [选中项]
+     */
+    handleSelect (item) {
+      this.searchTag.timeout = null;
+      console.log(item)
+    },
+    search () {
+      console.log('搜索字段为 ' + JSON.stringify(this.searchForm));
+      alert('搜索字段为 ' + JSON.stringify(this.searchForm));
     }
   }
 }
@@ -110,5 +161,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+.form-item {
+  display: inline-block;
 
+}
+.select {
+  width: 169px;
+}
 </style>

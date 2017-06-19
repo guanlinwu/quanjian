@@ -1,13 +1,32 @@
 <template>
-    <ul class="content-list">
-      <li class="item"
-        v-for="(item, index) in userData"
-        :key="index"
-      >
-        <span class="title">{{item.title}}</span>
-        <p class="content"><span v-if="item.isMoney">¥</span>{{item.content}}</p>
+  <ul class="content-list">
+      <li class="item">
+        <span class="title">编号:</span>
+        <p class="content">{{userData.number}}</p>
       </li>
-    </ul>
+      <li class="item">
+        <span class="title">姓名:</span>
+        <p class="content">{{userData.name}}</p>
+      </li>
+      <li class="item">
+        <span class="title">会员加盟余额:</span>
+        <p class="content">
+          <span>¥</span>{{userData.joinMoney}}</p>
+      </li>
+      <li class="item">
+        <span class="title">积分总额:</span>
+        <p class="content">{{userData.credit}}</p>
+      </li>
+      <li class="item">
+        <span class="title">会员身份:</span>
+        <p class="content">{{userData.userType}}</p>
+      </li>
+      <li class="item">
+        <span class="title">累积消费金额:</span>
+        <p class="content">
+          <span>¥</span>{{userData.accumulateCost}}</p>
+      </li>
+  </ul>
 </template>
 
 <script>
@@ -28,14 +47,13 @@ export default {
 .content-list {
 
   padding: 6px 6px 0;
-  border-radius: 4px;
-  // background: #eef1f6;
-
+  border-radius: 4px; // background: #eef1f6;
   .item {
     position: relative;
     font-size: 14px;
     line-height: 32px;
     color: #8b572a;
+    height: 32px;
   }
   .title {
     position: absolute;

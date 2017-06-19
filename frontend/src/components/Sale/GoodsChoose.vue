@@ -9,14 +9,14 @@
               v-model="inputUserCnt"
               size="small"
               icon="search"
-              :fetch-suggestions="queryUserSearch"
-              placeholder="请输入产品名称"
+              :fetch-suggestions="querySearchUser"
+              placeholder="请输入会员名称"
               :trigger-on-focus="false"
               @select="handleUserSelect"
               :on-icon-click="handleIconUserClick"
             ></el-autocomplete>
 
-            <UserCard :userData="userData"></UserCard>
+            <UserCard v-if="Object.keys(this.userData).length > 0" :userData="userData"></UserCard>
           </div>
         </el-col>
 
@@ -39,6 +39,7 @@
             @select="handleSelect"
             :on-icon-click="handleIconClick"
           ></el-autocomplete>
+          <el-button class="btn-add" @click="resetList(1)" type="primary">显示全部商品<i class="el-icon-menu el-icon--right"></i></el-button>
           </div>
 
           <el-row>
@@ -98,7 +99,6 @@
                       size="small"
                       type="primary"
                       >添加</el-button>
-
                   </template>
                 </el-table-column>
               </el-table>
@@ -106,10 +106,22 @@
           </el-row>
         </el-col>
       </el-row>
+
+      <!--分页器-->
+      <div class="u-pagination">
+        <el-pagination
+          :current-page="currentPage"
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+          :total="totalPage">
+        </el-pagination>
+      </div>
     </div>
 </template>
 
 <script>
+import {getUsersRecommend, getUsersItem} from '@/api/user';
+import {getGoodsList, getGoodsRecommend, getGoodsItem} from '@/api/goods';
 import UserCard from '@/components/Sale/UserCard';
 
 export default {
@@ -119,14 +131,14 @@ export default {
   },
   data () {
     return {
+       //分页器-当前页
+      currentPage: 1,
+      //分页器-总页数 1页 = 10
+      totalPage: 10,
       //用户搜索框内容
       inputUserCnt: '',
       //用户搜索框查询建议列表数据
-      recommendsUser: [
-        { 'value': '2222' },
-        { 'value': 'Hot honey 首尔炸鸡（仙霞路）' },
-        { 'value': '新旺角茶餐厅' }
-      ],
+      recommendsUser: [],
       //产品搜索框内容
       inputCnt: '',
       //产品搜索框查询建议列表数据
@@ -135,64 +147,16 @@ export default {
         { 'value': 'Hot honey 首尔炸鸡（仙霞路）' },
         { 'value': '新旺角茶餐厅' }
       ],
+      userRecommends: [],
+      goodsRecommends: [],
+      searchTag: {
+        timeout: 1000,
+        timer: null
+      },
       //搜索出用户数据
-      userData: [
-        {
-          title: '编号:',
-          content: '0002323'
-        },
-        {
-          title: '姓名:',
-          content: '新旺角'
-        },
-        {
-          title: '会员加盟余额:',
-          content: '2002320',
-          isMoney: true
-        },
-        {
-          title: '积分总额:',
-          content: '80023'
-        },
-        {
-          title: '会员身份:',
-          content: '累积会员'
-        },
-        {
-          title: '累积消费金额:',
-          content: '23233',
-          isMoney: true
-        }
-      ],
+      userData: [],
       //产品选择表格数据
-      goodsTable: [{
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '200',
-        converRate: '0.9',
-        credit: '200',
-        isSpecial: '1',
-        goodsType: '本草'
-      }, {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '200',
-        converRate: '0.9',
-        credit: '200',
-        isSpecial: '0',
-        goodsType: '本草'
-      }, {
-        number: '0123',
-        name: '麦芽精',
-        standard: '10包/盒',
-        price: '200',
-        converRate: '0.9',
-        credit: '200',
-        isSpecial: '1',
-        goodsType: '本草'
-      }],
+      goodsTable: [],
       //产品类型选择select表单数据
       typeArr: [{
         value: '选项1',
@@ -214,34 +178,136 @@ export default {
       type: ''
     }
   },
+  props: [
+    'pickGoods'
+  ],
+  created () {
+    //请求加载数据
+    this.fetchList(this.currentPage);
+  },
   methods: {
-    //用户搜索框查询建议
-    queryUserSearch (queryString, cb) {
-      // 调用 callback 返回建议列表的数据
-      cb(this.recommendsUser);
+    /**
+     * 搜索框查询建议
+     * @param  {[String]}   queryString [搜索字段]
+     * @param  {Function} cb          [回调函数]
+     * @return
+     */
+    querySearchUser (queryString, cb) {
+      /**
+       * [获取请求建议并且显示数据]
+       * @param  {[String]} queryString [搜索字段]
+       */
+      const getRecommends = (queryString) => {
+        let _queryString = queryString;
+        getUsersRecommend(_queryString)
+        .then(({data}) => {
+          this.userRecommends = data.recommends;
+          /**
+           * 调用 callback 返回建议列表的数据
+           */
+          cb(this.userRecommends);
+        });
+      };
+
+      let _timeout = this.searchTag.timeout;
+
+      if (this.searchTag.timeout === null) {
+
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      } else {
+        clearTimeout(this.searchTag.timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      }
     },
     //用户搜索框查询按钮
     handleIconUserClick () {
     },
     //用户搜索框处理选中建议项
     handleUserSelect (item) {
-      console.log(item);
+      let id = item.id;
+      getUsersItem(id).then(({data}) => {
+        this.userData = data.users;
+        this.$bus.emit('setUserData', data.users);
+      });
     },
     //搜索框查询建议
     querySearch (queryString, cb) {
-      // 调用 callback 返回建议列表的数据
-      cb(this.recommends);
+      /**
+       * [获取请求建议并且显示数据]
+       * @param  {[String]} queryString [搜索字段]
+       */
+      const getRecommends = (queryString) => {
+        let _queryString = queryString;
+        getGoodsRecommend(_queryString)
+        .then(({data}) => {
+          this.recommends = data.recommends;
+          /**
+           * 调用 callback 返回建议列表的数据
+           */
+          cb(this.recommends);
+        });
+      };
+
+      let _timeout = this.searchTag.timeout;
+
+      if (this.searchTag.timeout === null) {
+
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      } else {
+        clearTimeout(this.searchTag.timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      }
     },
     //搜索框查询按钮
     handleIconClick () {
     },
-    //搜索框处理选中建议项
+    /**
+     * 搜索框处理选中建议项
+     * @param  {[Object]} item [选中项]
+     */
     handleSelect (item) {
-      console.log(item);
+      let id = item.id;
+      //请求单个用户信息
+      getGoodsItem(id)
+      .then(({data}) => {
+        this.goodsTable = new Array(data.goods);
+        this.totalPage = data.totalPage ? data.totalPage * 10 : 10;
+      });
     },
-    //添加商品
+    //添加商品 重点
     handleAddGoods (index, row) {
-      console.log(row)
+      this.$bus.emit('addPickGoods', row);
+    },
+    /**
+     * 分页器-页面变换的时候
+     * @param  {[Number]} val [跳转页码]
+     */
+    handleCurrentChange (val) {
+      if (!(val > this.totalPage / 10)) {
+        this.currentPage = val;
+        //请求加载数据
+        this.fetchList(this.currentPage);
+      }
+    },
+    /**
+     * 显示全部会员，把当前页重置为第一页，把搜索框的内容清空
+     * @param  {[Number]} page [跳转页]
+     */
+    resetList (page) {
+      this.inputCnt = '';
+      this.currentPage = page;
+      this.fetchList(this.currentPage);
+    },
+    /**
+     * 请求页数，获取用户数据列表并更新
+     * @param  {[Number]} currentPage [当前页]
+     */
+    fetchList (currentPage) {
+      getGoodsList(currentPage)
+      .then(({data}) => {
+        this.goodsTable = data.goodsList;
+        this.totalPage = data.totalPage * 10;
+      });
     }
   }
 }
@@ -256,6 +322,10 @@ export default {
     font-size: 16px;
     line-height: 36px;
     font-weight: 300;
+  }
+
+  .btn-add, .btn-batch {
+    margin-left: 20px
   }
 }
 

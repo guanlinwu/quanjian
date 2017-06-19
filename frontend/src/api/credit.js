@@ -88,6 +88,10 @@ export const getCreditRecommend = (query) => {
   });
 };
 
+/**
+ *
+ * @param {object} options
+ */
 export const modifyCredit = (options) => {
   return new Promise((resolve, reject) => {
     let token = storage.get('token');

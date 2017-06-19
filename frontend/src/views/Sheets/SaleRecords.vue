@@ -2,47 +2,43 @@
   <div class="sale-records">
     <div class="head-box">
       <el-form ref="searchForm" :model="searchForm" label-width="80px">
-          <el-col :span="6">
-            <el-form-item label="会员">
-              <el-input v-model="searchForm.userName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="商品">
-              <el-input v-model="searchForm.goodsName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="商品类别">
-              <el-select v-model="searchForm.goodsType" placeholder="请选择商品类型">
-                <el-option label="xxx1" value="xxx1"></el-option>
-                <el-option label="xxx2" value="xxx2"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="折扣方式">
-              <el-select v-model="searchForm.discountWay" placeholder="请选择商品类型">
-                <el-option label="xxx1" value="xxx1"></el-option>
-                <el-option label="xxx2" value="xxx2"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+          <el-form-item class="form-item" label="会员">
+              <el-autocomplete
+              v-model="searchForm.userName"
+              :fetch-suggestions="querySearchUser"
+              placeholder="用户名称/编号/手机号"
+              :trigger-on-focus="false"
+              @select="handleSelect"
+            ></el-autocomplete>
+          </el-form-item>
+          <el-form-item class="form-item" label="商品">
+            <el-autocomplete
+              v-model="searchForm.goodsName"
+              :fetch-suggestions="querySearchGoods"
+              placeholder="产品名称/编号"
+              :trigger-on-focus="false"
+              @select="handleSelect"
+            ></el-autocomplete>
+          </el-form-item>
+          <el-form-item class="form-item" label="商品类别">
+            <el-select class="select" v-model="searchForm.goodsType" placeholder="请选择商品类型">
+              <el-option label="xxx1" value="xxx1"></el-option>
+              <el-option label="xxx2" value="xxx2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item class="form-item" label="折扣方式">
+            <el-select class="select" v-model="searchForm.discountWay" placeholder="请选择商品类型">
+              <el-option label="xxx1" value="xxx1"></el-option>
+              <el-option label="xxx2" value="xxx2"></el-option>
+            </el-select>
+          </el-form-item>
 
-          <el-col :span="14">
-            <el-form-item label="交易时间">
-                <el-col :span="9" style="padding-left: 0; padding-right: 0;">
-                  <el-date-picker type="date" placeholder="选择开始日期" v-model="searchForm.payTimeBegin"></el-date-picker>
-                </el-col>
-                <el-col class="line" :span="1" style="margin-right: 10px;">-</el-col>
-                <el-col :span="9" style="padding-left: 0; padding-right: 0;">
-                  <el-date-picker type="date" placeholder="选择结束日期" v-model="searchForm.payTimeEnd"></el-date-picker>
-                </el-col>
-            </el-form-item>
-          </el-col>
-          <el-col :span="1" :offset="6">
-            <el-button type="primary">搜索</el-button>
-          </el-col>
+          <el-form-item label="交易时间" class="form-item">
+            <el-date-picker type="date" placeholder="选择开始日期" v-model="searchForm.payTimeBegin"></el-date-picker>
+            <span>-</span>
+            <el-date-picker type="date" placeholder="选择结束日期" v-model="searchForm.payTimeEnd"></el-date-picker>
+          </el-form-item>
+          <el-button style="float: right;margin-right: 16px;" @click="search" type="primary">搜索</el-button>
       </el-form>
     </div>
 
@@ -108,12 +104,15 @@
     </el-row>
     <div class="sum">
       <span class="title">合计金额：</span>
-      <span class="content">¥293849</span>
+      <span class="content">¥{{sum}}</span>
     </div>
   </div>
 </template>
 
 <script>
+import {getUsersRecommend} from '@/api/user';
+import {getGoodsRecommend} from '@/api/goods';
+
 export default {
   name: 'sale-records',
   data () {
@@ -159,7 +158,102 @@ export default {
         payWay: '微信',
         price: '232323',
         credit: '7500'
-      }]
+      }],
+      userRecommends: [],
+      goodsRecommends: [],
+      searchTag: {
+        timeout: 1000,
+        timer: null
+      }
+    }
+  },
+  computed: {
+    sum () {
+      let _sum = 0;
+      this.tableData.forEach((item) => {
+        _sum += +item.price;
+      });
+      return _sum;
+    }
+  },
+  methods: {
+    /**
+     * 搜索框查询建议
+     * @param  {[String]}   queryString [搜索字段]
+     * @param  {Function} cb          [回调函数]
+     * @return
+     */
+    querySearchUser (queryString, cb) {
+      /**
+       * [获取请求建议并且显示数据]
+       * @param  {[String]} queryString [搜索字段]
+       */
+      const getRecommends = (queryString) => {
+        let _queryString = queryString;
+        getUsersRecommend(_queryString)
+        .then(({data}) => {
+          this.userRecommends = data.recommends;
+          /**
+           * 调用 callback 返回建议列表的数据
+           */
+          cb(this.userRecommends);
+        });
+      };
+
+      let _timeout = this.searchTag.timeout;
+
+      if (this.searchTag.timeout === null) {
+
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      } else {
+        clearTimeout(this.searchTag.timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      }
+    },
+    /**
+     * 搜索框查询建议
+     * @param  {[String]}   queryString [搜索字段]
+     * @param  {Function} cb          [回调函数]
+     * @return
+     */
+    querySearchGoods (queryString, cb) {
+      /**
+       * [获取请求建议并且显示数据]
+       * @param  {[String]} queryString [搜索字段]
+       */
+      const getRecommends = (queryString) => {
+        let _queryString = queryString;
+        getGoodsRecommend(_queryString)
+        .then(({data}) => {
+          this.goodsRecommends = data.recommends;
+          /**
+           * 调用 callback 返回建议列表的数据
+           */
+          cb(this.goodsRecommends);
+        });
+      };
+
+      let _timeout = this.searchTag.timeout;
+
+      if (this.searchTag.timeout === null) {
+
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      } else {
+        clearTimeout(this.searchTag.timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      }
+    },
+    /**
+     * 搜索框处理选中建议项
+     * @param  {[Object]} item [选中项]
+     */
+    handleSelect (item) {
+      this.searchTag.timeout = null;
+      console.log(item)
+    },
+    search () {
+      console.log('搜索字段为 ' + JSON.stringify(this.searchForm));
+      alert('搜索字段为 ' + JSON.stringify(this.searchForm));
     }
   }
 }
@@ -175,13 +269,18 @@ export default {
   border-radius: 4px;
   background: #fff;
 
-  .title {
-
-  }
   .content {
     margin-left: 16px;
     font-size: 18px;
     font-weight: 600;
   }
 }
+.form-item {
+  display: inline-block;
+
+}
+.select {
+  width: 169px;
+}
+
 </style>

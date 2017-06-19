@@ -6,8 +6,8 @@
         v-model="inputUserCnt"
         size="small"
         icon="search"
-        :fetch-suggestions="queryUserSearch"
-        placeholder="请输入产品名称"
+        :fetch-suggestions="querySearchUser"
+        placeholder="请输入会员名称"
         :trigger-on-focus="false"
         @select="handleUserSelect"
         :on-icon-click="handleIconUserClick"
@@ -55,21 +55,45 @@ export default {
       //用户搜索框内容
       inputUserCnt: '',
       //用户搜索框查询建议列表数据
-      recommendsUser: [
-        { 'value': '2222' },
-        { 'value': 'Hot honey 首尔炸鸡（仙霞路）' },
-        { 'value': '新旺角茶餐厅' }
-      ]
+      userRecommends: []
     }
   },
   components: {
     UserCard
   },
   methods: {
-    //用户搜索框查询建议
-    queryUserSearch (queryString, cb) {
-      // 调用 callback 返回建议列表的数据
-      cb(this.recommendsUser);
+    /**
+     * 搜索框查询建议
+     * @param  {[String]}   queryString [搜索字段]
+     * @param  {Function} cb          [回调函数]
+     * @return
+     */
+    querySearchUser (queryString, cb) {
+      /**
+       * [获取请求建议并且显示数据]
+       * @param  {[String]} queryString [搜索字段]
+       */
+      const getRecommends = (queryString) => {
+        let _queryString = queryString;
+        getUsersRecommend(_queryString)
+        .then(({data}) => {
+          this.userRecommends = data.recommends;
+          /**
+           * 调用 callback 返回建议列表的数据
+           */
+          cb(this.userRecommends);
+        });
+      };
+
+      let _timeout = this.searchTag.timeout;
+
+      if (this.searchTag.timeout === null) {
+
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      } else {
+        clearTimeout(this.searchTag.timeout);
+        this.searchTag.timeout = setTimeout(getRecommends, _timeout);
+      }
     },
     //用户搜索框查询按钮
     handleIconUserClick () {

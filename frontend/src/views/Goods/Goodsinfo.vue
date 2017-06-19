@@ -16,7 +16,7 @@
             @select="handleSelect"
             :on-icon-click="handleIconClick"
           ></el-autocomplete>
-          <el-button class="btn-add" @click="resetList(1)" type="primary">显示全部会员<i class="el-icon-menu el-icon--right"></i></el-button>
+          <el-button class="btn-add" @click="resetList(1)" type="primary">显示全部商品<i class="el-icon-menu el-icon--right"></i></el-button>
           <el-button class="btn-add" @click="dialogAddFormVisible = true" type="primary">添加产品<i class="el-icon-plus el-icon--right"></i></el-button>
           <el-button class="btn-batch" type="primary">批量录入<i class="el-icon-upload el-icon--right"></i></el-button>
           <el-button type="text">批量模版下载</el-button>
