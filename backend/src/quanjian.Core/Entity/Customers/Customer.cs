@@ -23,8 +23,15 @@ namespace quanjian.Entity.Customers
         [Column(TypeName = "decimal(16,4)")]
         public decimal Point { get; set; }
         [Required]
-        public bool IsVip { get; set; }
-        public  virtual List<CustomerLog> CustomerLogs { get; set; }
+        public int VipType { get; set; }
+        [Required]
+        [Column(TypeName = "decimal(16,4)")]
+        public decimal Spend { get; set; }
+        [Required]
+        [Column(TypeName = "decimal(16,4)")]
+        public decimal Level { get; set; }
+        public virtual List<CustomerLog> CustomerLogs { get; set; }
+        public virtual List<CustomerSpendLevelLog> CustomerSpendLevelLogs { get; set; }
         public virtual List<CustomerPointLog> CustomerPointLogs { get; set; }
         public virtual List<CustomerMoneyLog> CustomerMoneyLogs { get; set; }
     }

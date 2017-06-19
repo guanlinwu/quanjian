@@ -19,6 +19,7 @@ namespace quanjian.EntityFrameworkCore
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerLog> CustomerLogs { get; set; }
         public DbSet<CustomerMoneyLog> CustomerMoneyLogs { get; set; }
+        public DbSet<CustomerSpendLevelLog> CustomerSpendLevelLogs { get; set; }
         public DbSet<CustomerPointLog> CustomerPointLogs { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<ChildOrder> ChildOrders { get; set; }

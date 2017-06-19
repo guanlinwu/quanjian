@@ -11,6 +11,9 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <DefineConstants>FEATURE_SIGNALR</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp1.1\quanjian.Web.Host.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Update="log4net.config">

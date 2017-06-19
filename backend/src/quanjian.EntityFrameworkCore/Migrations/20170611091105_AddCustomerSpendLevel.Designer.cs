@@ -11,9 +11,10 @@ using Abp.Notifications;
 namespace quanjian.Migrations
 {
     [DbContext(typeof(quanjianDbContext))]
-    partial class quanjianDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170611091105_AddCustomerSpendLevel")]
+    partial class AddCustomerSpendLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");
