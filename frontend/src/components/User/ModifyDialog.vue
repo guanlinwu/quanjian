@@ -1,6 +1,6 @@
 <template>
   <div class="user-dialog">
-    <el-dialog title="修改会员信息" custom-class="modify-dialog" :visible.sync="dialogFormVisible" :before-close="handleToggleFormVisible">
+    <el-dialog @open="initOpen" title="修改会员信息" custom-class="modify-dialog" :visible.sync="dialogFormVisible" :before-close="handleToggleFormVisible">
       <el-form :inline="true" :model="selfform" ref="userform" :rules="rules" :label-position="labelPosition">
           <el-form-item label="姓名" label-width="120px" prop="name">
             <el-input v-model="selfform.name" auto-complete="off"></el-input>
@@ -118,6 +118,7 @@ export default {
     // 打开弹窗进行数据初始化
     initOpen () {
       this.selfform = Object.assign({}, this.userform);
+      console.log(this.selfform)
     },
     //处理select表单选中值发生变化
     handleUserTypeChange (item) {

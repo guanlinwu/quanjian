@@ -291,3 +291,22 @@ DELETE /zoos/ID/animals/ID：删除某个指定动物园的指定动物
 422 Unprocesable entity - [POST/PUT/PATCH] 当创建一个对象时，发生一个验证错误。
 500 INTERNAL SERVER ERROR - [*]：服务器发生错误，用户将无法判断发出的请求是否成功。
 ```
+## electron
+安装
+``` bash
+  #编译
+  # Install the `electron` command globally in your $PATH
+  #全局安装之后，就可以通过electron . 启动应用
+  npm install electron-prebuilt -g
+
+  # Install as a development dependency
+  npm install electron-prebuilt --save-dev
+
+  #打包
+  # for use in npm scripts
+  npm install electron-packager --save-dev
+
+  # for use from cli
+  npm install electron-packager -g
+```
+打包坑： node模块最好用npm安装，用cnpm安装，electron-packager会打包半年。

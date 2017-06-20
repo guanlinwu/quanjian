@@ -7,7 +7,10 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    //在web环境下
+    // assetsPublicPath: '/',
+    //在electron 生产环境下 --eproduction
+    assetsPublicPath: process.argv.indexOf('--eproduction') > -1 ? path.resolve(__dirname, '../dist') + '/' : '/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.

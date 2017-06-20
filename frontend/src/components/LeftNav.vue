@@ -38,7 +38,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .left-nav {
-    height: 964px;
+    height: 918px;
 
     .router-link-active {
         .el-menu-item {

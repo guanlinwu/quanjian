@@ -51,7 +51,7 @@ export default {
 
 .g-container {
   width: 100%;
-  min-height: 964px;
+  min-height: 800px;
   background: #D3DCE6;
 }
 
