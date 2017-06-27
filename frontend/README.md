@@ -15,7 +15,7 @@ npm run dev
 # build for production with minification
 npm run build
 
-# 如果需要假数据，则同事开启多一个命令窗口
+# 如果需要假数据，则同时开启多一个命令窗口
 npm run mock
 
 # build for production and view the bundle analyzer report
@@ -24,6 +24,30 @@ npm run build --report
 访问 http://localhost:8080
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## electron
+安装
+``` bash
+  #编译
+  # Install the `electron` command globally in your $PATH
+  #全局安装之后，就可以通过electron . 启动应用
+  npm install electron-prebuilt -g
+
+  # Install as a development dependency
+  npm install electron-prebuilt --save-dev
+
+  #打包
+  # for use in npm scripts
+  npm run estart
+
+  # for use from cli
+  npm run build
+
+  # 如果需要假数据，则同时开启多一个命令窗口
+  npm run mock
+```
+打包坑： node模块最好用npm安装，用cnpm安装，electron-packager会打包半年。
+
 
 ### 如果是npm网速不好的机子，最好使用cnpm或者nrm
 - 安装cnpm
@@ -291,22 +315,4 @@ DELETE /zoos/ID/animals/ID：删除某个指定动物园的指定动物
 422 Unprocesable entity - [POST/PUT/PATCH] 当创建一个对象时，发生一个验证错误。
 500 INTERNAL SERVER ERROR - [*]：服务器发生错误，用户将无法判断发出的请求是否成功。
 ```
-## electron
-安装
-``` bash
-  #编译
-  # Install the `electron` command globally in your $PATH
-  #全局安装之后，就可以通过electron . 启动应用
-  npm install electron-prebuilt -g
 
-  # Install as a development dependency
-  npm install electron-prebuilt --save-dev
-
-  #打包
-  # for use in npm scripts
-  npm install electron-packager --save-dev
-
-  # for use from cli
-  npm install electron-packager -g
-```
-打包坑： node模块最好用npm安装，用cnpm安装，electron-packager会打包半年。
