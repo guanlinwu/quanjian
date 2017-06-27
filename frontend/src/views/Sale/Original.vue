@@ -348,7 +348,7 @@ export default {
 
   //计数器
   .input-number {
-    margin-top: 10px;
+    // margin-top: 10px;
   }
 
   .select-pay-type {

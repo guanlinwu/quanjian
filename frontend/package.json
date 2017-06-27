@@ -6,7 +6,7 @@
   "private": true,
   "main": "electron.js",
   "scripts": {
-    "estart": "electron .",
+    "estart": "node build/build.js --eproduction && electron . --eproduction",
     "ebuild": "node build/build.js --eproduction && electron-packager ./ quanjian --platform=darwin --overwrite --ignore=node_modules/electron-*",
     "dev": "node build/dev-server.js",
     "mock": "node mock/server.js",

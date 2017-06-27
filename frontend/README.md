@@ -37,11 +37,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
   npm install electron-prebuilt --save-dev
 
   #打包
-  # for use in npm scripts
-  npm run estart
-
-  # for use from cli
-  npm run build
+  npm run ebuild
 
   # 如果需要假数据，则同时开启多一个命令窗口
   npm run mock

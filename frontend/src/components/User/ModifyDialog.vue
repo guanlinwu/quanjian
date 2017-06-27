@@ -119,6 +119,7 @@ export default {
     initOpen () {
       this.selfform = Object.assign({}, this.userform);
       console.log(this.selfform)
+      console.log(`initOpen`)
     },
     //处理select表单选中值发生变化
     handleUserTypeChange (item) {

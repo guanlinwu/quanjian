@@ -7,6 +7,7 @@ const {app, BrowserWindow} = require('electron');
 // 保持一个对于 window 对象的全局引用，不然，当 JavaScript 被 GC，
 // window 会被自动地关闭
 let mainWindow = null;
+
 // 当所有窗口被关闭了，退出。
 app.on('window-all-closed', ()=> {
   // 在 OS X 上，通常用户在明确地按下 Cmd + Q 之前
@@ -24,10 +25,19 @@ app.on('ready', ()=> {
 
   // 加载应用的 index.html
   // mainWindow.loadURL('http://localhost:8080');
-  mainWindow.loadURL(`file://${__dirname}/dist/index.html`);
+  // mainWindow.loadURL(`file://${__dirname}/dist/index.html`);
 
-  // 打开开发工具
-  process.argv.indexOf('--eproduction') > -1  && mainWindow.openDevTools();
+
+  // !(process.argv.indexOf('--eproduction') > -1)  && mainWindow.openDevTools();
+  if (process.argv.indexOf('--eproduction') > -1) {
+    //生产环境
+    mainWindow.loadURL(`file://${__dirname}/dist/index.html`);
+  } else {
+    // 开发环境
+    // 打开开发工具
+    mainWindow.openDevTools();
+    mainWindow.loadURL('http://localhost:8080');
+  }
 
   // 当 window 被关闭，这个事件会被发出
   mainWindow.on('closed', ()=> {
