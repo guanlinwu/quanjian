@@ -16,7 +16,6 @@ Vue.use(VueBus);
 Vue.prototype.$publicCore = new PublicCore(Vue);
 Vue.config.productionTip = false;
 
-window.testVue = new Vue();
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
